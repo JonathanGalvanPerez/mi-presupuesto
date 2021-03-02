@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MovementsApiClient } from '../../services/movements-api-client.service';
 
 @Component({
   selector: 'app-home',
@@ -6,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+	public balance: number;
 
-  constructor() { }
+  constructor(public movementsApiClient: MovementsApiClient) {
+  	this.balance = this.movementsApiClient.getBalance();
+  }
 
   ngOnInit(): void {
   }

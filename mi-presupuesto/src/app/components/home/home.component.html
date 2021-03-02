@@ -1,8 +1,19 @@
 <div>
 	<section>
 		<h2>Balance Actual</h2>
+		<h3>{{ balance }}</h3>
 	</section>
 	<section>
 		<h2>Ultimos Movimientos</h2>
+		<ul>
+			<li *ngFor="let m of movementsApiClient.getLastMovements()">
+				<app-movement
+					[balance] = 'm.balance'
+					[concept] = 'm.concept'
+					[date] = 'm.date'
+					[type] = 'm.types'>
+				</app-movement>
+			</li>
+		</ul>
 	</section>
 </div>

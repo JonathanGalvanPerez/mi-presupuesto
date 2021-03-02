@@ -7,19 +7,25 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { MovementsManagerComponent } from './components/movements-manager/movements-manager.component';
+import { MovementsApiClient } from './services/movements-api-client.service';
+import { AuthService } from './services/auth.service';
+import { MovementComponent } from './components/movement/movement.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    MovementsManagerComponent
+    MovementsManagerComponent,
+    MovementComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    MovementsApiClient,
+    AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
