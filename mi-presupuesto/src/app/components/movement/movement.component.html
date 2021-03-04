@@ -1,1 +1,22 @@
-<p>movement works!</p>
+<div class="movement-container mx-auto" (mouseover)="showEdit()" (mouseout)="hideEdit()">
+	<div #dark_screen class="dark-screen">Editar</div>
+	<div class="col-6 col-md-3">
+		<div class="tag d-block">Monto</div>
+		<div>{{ mount }}</div>
+	</div>
+	<div class="vl"></div>
+	<div class="col-6 col-md-3">
+		<div class="tag d-block">Tipo</div>
+		<div>{{ type }}</div>
+	</div>
+	<div class="vl"></div>
+	<div class="col-6 col-md-3">
+		<div class="tag d-block">Concepto</div>
+		{{ concept }}
+	</div>
+	<div class="vl"></div>
+	<div class="col-6 col-md-3">
+		<div class="tag d-block">Fecha</div>
+		{{ date }}
+	</div>
+</div>

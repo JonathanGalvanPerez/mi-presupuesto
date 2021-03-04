@@ -1,0 +1,31 @@
+.movement-container {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	background-color: skyblue;
+	border-radius: 10px;
+	width: 80%;
+	margin: 10px;
+	padding-bottom: 5px;
+}
+.tag {
+	font-size: 14px;
+}
+span {
+	padding: 10px;
+}
+.dark-screen{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.6);
+	z-index: 2;
+	display: none;
+	border-radius: 10px;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 25px;
+}

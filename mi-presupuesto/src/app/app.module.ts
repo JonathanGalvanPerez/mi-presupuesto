@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +11,7 @@ import { MovementsManagerComponent } from './components/movements-manager/moveme
 import { MovementsApiClient } from './services/movements-api-client.service';
 import { AuthService } from './services/auth.service';
 import { MovementComponent } from './components/movement/movement.component';
+import { FormMovementComponent } from './components/form-movement/form-movement.component';
 
 @NgModule({
   declarations: [
@@ -17,11 +19,14 @@ import { MovementComponent } from './components/movement/movement.component';
     HomeComponent,
     LoginComponent,
     MovementsManagerComponent,
-    MovementComponent
+    MovementComponent,
+    FormMovementComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     MovementsApiClient,

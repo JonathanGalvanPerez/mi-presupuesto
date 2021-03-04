@@ -8,10 +8,10 @@
 		<ul>
 			<li *ngFor="let m of movementsApiClient.getLastMovements()">
 				<app-movement
-					[balance] = 'm.balance'
+					[mount] = 'm.mount'
 					[concept] = 'm.concept'
 					[date] = 'm.date'
-					[type] = 'm.types'>
+					[type] = 'm.type'>
 				</app-movement>
 			</li>
 		</ul>

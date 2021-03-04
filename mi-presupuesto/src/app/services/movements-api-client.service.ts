@@ -10,7 +10,12 @@ export class MovementsApiClient {
   balance: number;
   lastMovements: Movement[];
 
-  constructor() {}
+  constructor() {
+    let email = localStorage.getItem('userLog')
+    if (email) {
+      this.loadAccount(email);
+    }
+  }
 
   loadAccount(email: string) {
     let name = "Jorge";
@@ -28,5 +33,7 @@ export class MovementsApiClient {
 
   getBalance = () => this.balance;
   getName = () => this.name;
+  // hacer dos querys distintas, ultimos 10 y todos
   getLastMovements = () => this.lastMovements;
+  getAllMovements = () => this.lastMovements;
 }

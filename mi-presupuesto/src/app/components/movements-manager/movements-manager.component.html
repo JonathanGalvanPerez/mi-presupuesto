@@ -1,1 +1,16 @@
-<p>movements-manager works!</p>
+<div>
+	<h2>Historial de Movimientos</h2>
+		<a class="btn btn-success" (click)="add()">Nueva transferencia</a>	
+		<ul>
+			<li *ngFor="let m of movementsApiClient.getAllMovements()">
+				<app-movement
+					[mount] = 'm.mount'
+					[concept] = 'm.concept'
+					[date] = 'm.date'
+					[type] = 'm.type'
+					[edit] = 'true'>
+				</app-movement>
+			</li>
+		</ul>
+
+</div>
