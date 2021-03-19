@@ -9,7 +9,7 @@
 	(ngSubmit)="save(fg.controls['mount'].value, fg.controls['type'].value, fg.controls['concept'].value)">
 		<div class="form-group">
 			<label for="mount">Monto</label>
-			<input type="number" placeholder="Ingresa el monto" autocomplete="off" class="formControl"formControlName="mount" >
+			<input type="number" step="10" placeholder="Ingresa el monto" autocomplete="off" class="formControl"formControlName="mount" >
 			<div *ngIf="fg.controls['mount'].invalid && fg.controls['mount'].touched">
 				<div *ngIf="fg.controls['mount'].errors.required">Monto vacio.</div>
 				<div *ngIf="fg.controls['mount'].errors.invalidMount">Monto invalido.</div>
@@ -19,8 +19,8 @@
 			<label for="type">Tipo</label>
 			<select formControlName="type" required>
 				<option [ngValue]="''" selected>Elige un tipo de transferencia</option>
-				<option [ngValue]="'receive'">Ingreso</option>
-				<option [ngValue]="'send'">Recibido</option>
+				<option [ngValue]="'Ingreso'">Ingreso</option>
+				<option [ngValue]="'Egreso'">Egreso</option>
 			</select>
 			<div *ngIf="fg.controls['type'].invalid && fg.controls['type'].touched">No ha elegido el tipo de transferencia.</div>
 		</div>
@@ -29,6 +29,6 @@
 			<input type="text" placeholder="Ingresa el concepto" autocomplete="off" class="formControl" formControlName="concept">
 			<div *ngIf="fg.controls['concept'].invalid && fg.controls['concept'].touched">Concepto vacio.</div>
 		</div>
-		<button	type="submit" class="btn btn-primary" *ngIf="fg.valid" (click)="activeModal.close('Close click')">Guardar</button>
+		<button	type="submit" class="btn btn-primary" *ngIf="fg.valid" (click)="activeModal.close('Close click')">Guardar Transferencia</button>
 	</form>
 </div>

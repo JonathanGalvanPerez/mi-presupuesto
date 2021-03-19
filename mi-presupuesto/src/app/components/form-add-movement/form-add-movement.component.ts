@@ -2,20 +2,18 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MovementsApiClient } from '../../services/movements-api-client.service';
 import { Movement } from '../../models/movement.model';
 
 @Component({
-  selector: 'app-form-movement',
-  templateUrl: './form-movement.component.html',
-  styleUrls: ['./form-movement.component.css']
+  selector: 'app-form-add-movement',
+  templateUrl: './form-add-movement.component.html',
+  styleUrls: ['./form-add-movement.component.css']
 })
-export class FormMovementComponent implements OnInit {
-	@Output() onItemAdded: EventEmitter<Movement>
+export class FormAddMovementComponent implements OnInit {
 	fg: FormGroup;
 
-  constructor(fb: FormBuilder, public activeModal: NgbActiveModal) {
-  	this.onItemAdded = new EventEmitter();
-  	this.fg = fb.group({
+  constructor(fb: FormBuilder, public activeModal: NgbActiveModal, private movementsApiClient: MovementsApiClient) {  	this.fg = fb.group({
   		mount: ['', Validators.compose([
   			Validators.required,
   			this.mountValidator
@@ -28,11 +26,11 @@ export class FormMovementComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  save(mount: number, type: string, concept: string): boolean {
-  	let date = formatDate(new Date(), 'yyyy/MM/dd', 'en');
-  	const movement = new Movement(mount, type, concept, date);
-  	this.onItemAdded.emit(movement);
-  	return false;
+  save(mount: number, type: string, concept: string) {
+  	let date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    let user_mail = localStorage.getItem('userLog');
+    let movement = new Movement(mount, type, concept, date, user_mail);
+  	this.movementsApiClient.add(movement);
   }
 
   mountValidator(control: FormControl): { [s: string]: boolean } {
