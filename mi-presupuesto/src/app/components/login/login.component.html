@@ -4,7 +4,7 @@
 		<h3	class="mb-0" *ngIf="authService.isLoggedIn()">Cerrar Sesión</h3>
 	</div>
 	<div class="card-body">
-		<form *ngIf="!authService.getUser()">
+		<form *ngIf="!authService.isLoggedIn()">
 			<div class="form-group">
 				<label for="email">E-Mail: </label>
 				<input type="text" class="form-control" name="email" #email>
@@ -14,8 +14,8 @@
 				<input type="password" class="form-control" name="password" #password>
 			</div>
 			<div class="alert alert-danger" *ngIf="errorLog">Login Incorrecto</div>
-			<a class="btn btn-success" [routerLink]="['/home']" (click)="login(email.value, password.value)"><span class="material-icons float-left mr-2">login</span>Ingresar</a>
+			<a class="btn btn-success" (click)="login(email.value, password.value)"><span class="material-icons float-left mr-2">login</span>Ingresar</a>
 		</form>
-		<a class="btn btn-danger" id="logout" (click)="logout()" *ngIf="authService.isLoggedIn()">Salir</a>
+		<a class="btn btn-danger" id="logout" (click)="authService.logOut()" *ngIf="authService.isLoggedIn()">Salir</a>
 	</div>
 </div>

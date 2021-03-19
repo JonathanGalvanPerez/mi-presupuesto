@@ -1,30 +1,30 @@
-import { Injectable } from '@angular/core';
-import { MovementsApiClient } from './movements-api-client.service';
+import { Injectable, Inject, forwardRef } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { AppConfig, APP_CONFIG } from '../app.module';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private movementsApiClient: MovementsApiClient) {}
+  constructor(@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig, private http: HttpClient) {}
 
-  login(email: string, password: string) {
-  	if (email == "jorge@email.com" && password == "123") {
-  		localStorage.setItem('userLog', email);
-  		this.movementsApiClient.loadAccount(email);
-  		return true;
-  	}
-  	return false;
+  login(email: string, password: string, callback): void {
+    let logged: boolean;
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('POST', this.config.apiEndpoint + '/login', {'email': email, 'password': password}, { headers: headers });
+    this.http.request(req).subscribe((result: HttpResponse<{}>) => {
+      if (result.status === 200 && result.body) {
+        localStorage.setItem('userLog', email);
+        callback();
+      }
+    });
   }
 
-  logout(): any {
+  logOut(): any {
   	localStorage.removeItem('userLog');
   }
 
-  getUser(): any {
-  	return localStorage.getItem('userLog');
-  }
-
   isLoggedIn(): boolean {
-  	return this.getUser() !== null;
+  	return localStorage.getItem('userLog') !== null;
   }
 }
