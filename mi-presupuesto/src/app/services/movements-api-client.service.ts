@@ -1,39 +1,153 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, forwardRef } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Movement } from '../models/movement.model';
+import { APP_CONFIG, AppConfig } from '../app.module';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovementsApiClient {
-  name: string;
   email: string;
-  balance: number;
-  lastMovements: Movement[];
+  name: string;
+  balance: BehaviorSubject<number>;
+  movements: Movement[];
 
-  constructor() {
-    let email = localStorage.getItem('userLog')
-    if (email) {
-      this.loadAccount(email);
-    }
+  constructor(@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig, private http: HttpClient) {
+    this.balance = new BehaviorSubject<number>(0);
   }
 
-  loadAccount(email: string) {
-    let name = "Jorge";
-    let balance = 400;
-    let lastMovements = [
-      new Movement(1000, "recarga en efectivo", "2021-01-10", "ingreso"),
-      new Movement(200, "carga SUBE", "2021-01-10", "ingreso"),
-      new Movement(400, "carga celular", "2021-01-10", "ingreso"),
-    ]
-    this.name = name;
-    this.email = email;
-    this.balance = balance;
-    this.lastMovements = lastMovements;
+  async loadAccount(): Promise<void> {
+    this.email = localStorage.getItem('userLog');
+    if (this.email === null) {
+      console.log("userLog no existe. No se cargan los datos");
+      return null;
+    }
+    return new Promise<void>((resolve, reject) => {
+      console.log("userLog existe. Se cargan los datos de");
+      console.log(this.email);
+      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/loadAccount?email=' + this.email, { headers: headers });
+      this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+        if(data.status === 200) {
+          let response: any = data.body[0];
+          this.email = response.email;
+          this.name = response.name;
+          this.balance.next(response.balance as number);
+          this.loadMovements().then(() => resolve());
+        }
+      });
+    });
+  }
+
+  loadMovements() {
+    return new Promise<void>((resolve, reject) => {
+      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/allMovements?user_email=' + this.email, { headers: headers });
+      this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+        if(data.status === 200) {
+          var response: any = data.body;
+          var allMovements = response.map(m => new Movement(m.mount, m.type, m.concept, m.date, m.user_email, m.id));
+          this.movements = allMovements;
+          console.log("actualizo movimientos")
+          console.log(allMovements);
+          resolve();
+        }
+      });
+    });
+  }
+
+  getLastMovements(): Movement[] {
+    /*const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('GET', this.config.apiEndpoint + '/lastMovements?user_email=jorge@email.com', { headers: headers });
+    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+      if(data.status === 200) {
+        let response: any = data.body;
+        this.lastMovements = response.map(m => new Movement(m.mount, m.type, m.concept, m.date, m.user_email, m.id));
+        return this.lastMovements;
+      }
+    });
+    return null;*/
+    console.log("Api envia");
+    console.log(this.movements);
+    return this.movements.slice(0,10);
+  }
+
+  getAllMovements(): Movement[] {
+    return this.movements;
+  }
+
+  edit(mount: number, oldMount: number, type: string, concept: string, id: string) {
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('GET', this.config.apiEndpoint + '/edit?mount=' + mount + '&concept=' + concept + '&id=' + id, { headers: headers });
+    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+      if(data.status === 200) {
+        let movement: Movement = this.movements.find(movement => movement.id == id);
+        movement.setMount(mount);
+        movement.setConcept(concept);
+        let oldBalance = this.balance.getValue();
+        if (type == "Ingreso") {
+          this.balance.next((oldBalance - oldMount) + mount);
+        } else {
+          this.balance.next((oldBalance + oldMount) - mount);
+        }
+        console.log("Se modifico el balance");
+        this.updateBalance();
+      }
+    });
+  }
+
+  add(movement: Movement) {
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('POST', this.config.apiEndpoint + '/add', movement, { headers: headers });
+    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+      if(data.status === 200) {
+        this.movements.unshift(movement);
+        let balance = this.balance.getValue();
+        if (movement.type == "Ingreso") {
+          this.balance.next(balance + movement.mount);
+        } else {
+          this.balance.next(balance - movement.mount);
+        }
+        this.updateBalance();
+      }
+    });
+  }
+
+  delete(id: string) {
+    console.log("se recibio el llamado a delete")
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('GET', this.config.apiEndpoint + '/delete?id=' + id, { headers: headers });
+    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+      if(data.status === 200) {
+        console.log("se elimino el registro");
+        let index = this.movements.findIndex(movement => movement.id === id);
+        let deleted = this.movements.splice(index, 1);
+        let oldBalance = this.balance.getValue();
+        if(deleted[0].type === 'Ingreso')
+          this.balance.next(oldBalance-deleted[0].mount);
+        else
+          this.balance.next(oldBalance+deleted[0].mount);
+        this.updateBalance();
+      }
+    });
+  }
+
+  updateBalance() {
+    console.log("Se ejecuto la actualizancion del balance");
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('POST', this.config.apiEndpoint + '/updateBalance', { 'balance': this.balance.getValue(), 'email': this.email }, { headers: headers });
+    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+      if(data.status === 200)
+        console.log("se actualizo el balance");
+    });
+  }
+
+  subscribeOnChangeBalance(fn) {
+    this.balance.subscribe(fn);
   }
 
   getBalance = () => this.balance;
   getName = () => this.name;
-  // hacer dos querys distintas, ultimos 10 y todos
-  getLastMovements = () => this.lastMovements;
-  getAllMovements = () => this.lastMovements;
 }
