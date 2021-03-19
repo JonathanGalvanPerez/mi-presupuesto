@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MovementsApiClient } from '../../services/movements-api-client.service';
-import { FormMovementComponent } from '../form-movement/form-movement.component';
+import { FormAddMovementComponent } from '../form-add-movement/form-add-movement.component';
 
 @Component({
   selector: 'app-movements-manager',
@@ -16,6 +16,6 @@ export class MovementsManagerComponent implements OnInit {
   }
 
   add() {
-  	const modalRef = this.modalService.open(FormMovementComponent);
+  	const modalRef = this.modalService.open(FormAddMovementComponent);
   }
 }

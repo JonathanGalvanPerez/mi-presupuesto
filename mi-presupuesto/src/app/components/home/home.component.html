@@ -6,7 +6,7 @@
 	<section>
 		<h2>Ultimos Movimientos</h2>
 		<ul>
-			<li *ngFor="let m of movementsApiClient.getLastMovements()">
+			<li *ngFor="let m of getMovements(); trackBy: trackElement">
 				<app-movement
 					[mount] = 'm.mount'
 					[concept] = 'm.concept'

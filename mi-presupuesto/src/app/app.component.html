@@ -9,10 +9,10 @@
       		<a class="nav-link" [routerLink]="['home']">Home</a>
       	</li>
     		<li class="nav-item">
-    			<a class="nav-link" [routerLink]="['gestor-movimientos']">Planificar</a>
+    			<a class="nav-link" [routerLink]="['gestor-movimientos']">Gestor de Movimientos</a>
     		</li>
         <li class="nav-item">
-          <a class="nav-link" *ngIf="authService.isLoggedIn()" [routerLink]="['login']">Cerrar Sesion</a>
+          <a class="nav-link" *ngIf="authService.isLoggedIn()" (click)="authService.logOut()" [routerLink]="['login']">Cerrar Sesion</a>
         </li>
       </ul>
     </nav>

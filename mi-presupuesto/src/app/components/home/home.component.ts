@@ -10,10 +10,20 @@ export class HomeComponent implements OnInit {
 	public balance: number;
 
   constructor(public movementsApiClient: MovementsApiClient) {
-  	this.balance = this.movementsApiClient.getBalance();
+  	movementsApiClient.subscribeOnChangeBalance(balance => this.balance = balance);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  getMovements() {
+  	var lista = this.movementsApiClient.getLastMovements();
+  	console.log("home recibio");
+  	console.log(lista);
+  	return lista;
+  }
+
+  trackElement(index: number, element: any) {
+  	return element ? element.id : null; 
   }
 
 }
