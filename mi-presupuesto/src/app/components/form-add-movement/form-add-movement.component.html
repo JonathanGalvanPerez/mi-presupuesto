@@ -5,30 +5,29 @@
 	</button>
 </div>
 <div class="modal-content">
-	<form [formGroup]="fg"
-	(ngSubmit)="save(fg.controls['mount'].value, fg.controls['type'].value, fg.controls['concept'].value)">
+	<form [formGroup]="fg" (ngSubmit)="save()" class="col-12 col-sm-8 mx-auto">
 		<div class="form-group">
 			<label for="mount">Monto</label>
-			<input type="number" step="10" placeholder="Ingresa el monto" autocomplete="off" class="formControl"formControlName="mount" >
+			<input type="number" step="10" placeholder="Ingresa el monto" autocomplete="off" ngbAutofocus class="form-control" formControlName="mount">
 			<div *ngIf="fg.controls['mount'].invalid && fg.controls['mount'].touched">
-				<div *ngIf="fg.controls['mount'].errors.required">Monto vacio.</div>
-				<div *ngIf="fg.controls['mount'].errors.invalidMount">Monto invalido.</div>
+				<div class="alert alert-danger" *ngIf="fg.controls['mount'].errors.required">Por favor ingrese un monto.</div>
+				<div class="alert alert-danger" *ngIf="fg.controls['mount'].errors.invalidMount && !fg.controls['mount'].errors.required">Monto invalido. Ingrese un monto mayor a 0.</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="type">Tipo</label>
-			<select formControlName="type" required>
-				<option [ngValue]="''" selected>Elige un tipo de transferencia</option>
+			<select formControlName="type" class="form-control" required>
+				<option [ngValue]="''" selected>Seleccione un tipo de transferencia</option>
 				<option [ngValue]="'Ingreso'">Ingreso</option>
 				<option [ngValue]="'Egreso'">Egreso</option>
 			</select>
-			<div *ngIf="fg.controls['type'].invalid && fg.controls['type'].touched">No ha elegido el tipo de transferencia.</div>
+			<div class="alert alert-danger" *ngIf="fg.controls['type'].invalid && fg.controls['type'].touched">Por favor seleccione un tipo de transferencia.</div>
 		</div>
 		<div class="form-group">
 			<label for="concept">Concepto</label>
-			<input type="text" placeholder="Ingresa el concepto" autocomplete="off" class="formControl" formControlName="concept">
-			<div *ngIf="fg.controls['concept'].invalid && fg.controls['concept'].touched">Concepto vacio.</div>
+			<input type="text" placeholder="Ingresa el concepto" autocomplete="off" class="form-control" formControlName="concept">
+			<div class="alert alert-danger" *ngIf="fg.controls['concept'].invalid && fg.controls['concept'].touched">Por favor ingrese un concepto.</div>
 		</div>
-		<button	type="submit" class="btn btn-primary" *ngIf="fg.valid" (click)="activeModal.close('Close click')">Guardar Transferencia</button>
+		<button	type="submit" class="btn btn-primary col-12 col-sm-8 my-3" [disabled]="fg.invalid">Guardar Transferencia</button>
 	</form>
 </div>

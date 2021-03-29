@@ -17,22 +17,23 @@ export class FormEditMovementComponent implements OnInit {
 	@Input() id: string;
 	fg: FormGroup;
 
-  constructor(fb: FormBuilder, public activeModal: NgbActiveModal, private movementsApiClient: MovementsApiClient) {
-  	this.fg = fb.group({
-  		mount: ['', Validators.compose([
-  			Validators.required,
-  			this.mountValidator
-  		])],
-  		concept: ['', Validators.required]
-  	});
-  }
+  constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, private movementsApiClient: MovementsApiClient) {}
 
   ngOnInit(): void {
+    this.fg = this.fb.group({
+      mount: [this.mount, [
+        Validators.required,
+        this.mountValidator
+      ]],
+      concept: [this.concept, Validators.required]
+    });
   }
 
-  save(mount: number, concept: string): boolean {
+  save() {
+    let mount = this.fg.controls['mount'].value;
+    let concept = this.fg.controls['concept'].value;
   	this.movementsApiClient.edit(mount, this.mount, this.type, concept, this.id)
-  	return false;
+  	this.activeModal.close('Close click');
   }
 
   mountValidator(control: FormControl): { [s: string]: boolean } {

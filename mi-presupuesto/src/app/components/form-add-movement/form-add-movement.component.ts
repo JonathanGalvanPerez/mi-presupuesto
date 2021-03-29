@@ -13,24 +13,28 @@ import { Movement } from '../../models/movement.model';
 export class FormAddMovementComponent implements OnInit {
 	fg: FormGroup;
 
-  constructor(fb: FormBuilder, public activeModal: NgbActiveModal, private movementsApiClient: MovementsApiClient) {  	this.fg = fb.group({
-  		mount: ['', Validators.compose([
-  			Validators.required,
-  			this.mountValidator
-  		])],
-  		type: ['', Validators.required],
-  		concept: ['', Validators.required]
-  	})
-  }
+  constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, private movementsApiClient: MovementsApiClient) {}
 
   ngOnInit(): void {
+    this.fg = this.fb.group({
+      mount: ['', [
+        Validators.required,
+        this.mountValidator
+      ]],
+      type: ['', Validators.required],
+      concept: ['', Validators.required]
+    });
   }
 
-  save(mount: number, type: string, concept: string) {
+  save() {
+    let mount = this.fg.controls['mount'].value;
+    let type = this.fg.controls['type'].value;
+    let concept = this.fg.controls['concept'].value;
   	let date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
     let user_mail = localStorage.getItem('userLog');
     let movement = new Movement(mount, type, concept, date, user_mail);
   	this.movementsApiClient.add(movement);
+    this.activeModal.close('Close click');
   }
 
   mountValidator(control: FormControl): { [s: string]: boolean } {
