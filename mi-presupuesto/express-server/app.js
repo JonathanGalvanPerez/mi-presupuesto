@@ -32,6 +32,20 @@ app.post("/login", (req, res, next) => {
 	});
 });
 
+app.get("/validateEmail", (req, res, next) => {
+	var query = connection.query("SELECT * FROM accounts WHERE email=?", [req.query.email], (error, result) => {
+		if(error){
+			throw error;
+		}else{
+        	if(result.length > 0){
+         		res.send(true);
+         	}else{
+         		res.send(false);
+         	}
+		}
+	});
+});
+
 app.get("/loadAccount", (req, res, next) => {
 	var query = connection.query("SELECT * FROM accounts WHERE email=?", [req.query.email], (error, result) => {
 		if(error){
@@ -53,7 +67,7 @@ app.get("/lastMovements", (req, res, next) => {
 });
 
 app.get("/allMovements", (req, res, next) => {
-	var query = connection.query("SELECT * FROM movements WHERE user_email=?", [req.query.user_email], (error, result) => {
+	var query = connection.query("SELECT * FROM movements WHERE user_email=? ORDER BY date DESC", [req.query.user_email], (error, result) => {
 		if(error) {
 			throw error;
 		}else{

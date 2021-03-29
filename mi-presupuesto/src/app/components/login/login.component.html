@@ -1,21 +1,23 @@
-<div class="card card-outline-secondary col-6 mx-auto text-center">
+<div class="card card-outline-secondary col-12 col-md-6">
 	<div class="card-header">
-		<h3	class="mb-0" *ngIf="!authService.isLoggedIn()">Inicio Sesión</h3>
-		<h3	class="mb-0" *ngIf="authService.isLoggedIn()">Cerrar Sesión</h3>
+		<h3	class="mb-0">Inicio de Sesión</h3>
 	</div>
 	<div class="card-body">
-		<form *ngIf="!authService.isLoggedIn()">
+		<form [formGroup]="fg" (ngSubmit)="login()">
 			<div class="form-group">
 				<label for="email">E-Mail: </label>
-				<input type="text" class="form-control" name="email" #email>
+				<input type="email" class="form-control" formControlName="email" autofocus>
+				<div *ngIf="fg.controls['email'].invalid && fg.controls['email'].touched">
+					<div class="alert alert-danger" *ngIf="fg.controls['email'].errors.invalidEmail">El E-mail no está registrado</div>
+					<div class="alert alert-danger" *ngIf="fg.controls['email'].errors.required">Por favor ingrese su E-Mail</div>
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="password">Contraseña: </label>
-				<input type="password" class="form-control" name="password" #password>
+				<input type="password" class="form-control" formControlName="password">
+				<div class="alert alert-danger" *ngIf="errorLog">Contraseña incorrecta</div>
 			</div>
-			<div class="alert alert-danger" *ngIf="errorLog">Login Incorrecto</div>
-			<a class="btn btn-success" (click)="login(email.value, password.value)"><span class="material-icons float-left mr-2">login</span>Ingresar</a>
+			<button type="submit" class="btn btn-success" [disabled]="fg.invalid"><span class="material-icons float-left mr-2"></span>Ingresar</button>
 		</form>
-		<a class="btn btn-danger" id="logout" (click)="authService.logOut()" *ngIf="authService.isLoggedIn()">Salir</a>
 	</div>
 </div>
