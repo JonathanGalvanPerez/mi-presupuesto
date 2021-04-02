@@ -48,7 +48,7 @@ export class MovementsApiClient {
       this.http.request(req).subscribe((data: HttpResponse<{}>) => {
         if(data.status === 200) {
           var response: any = data.body;
-          var allMovements = response.map(m => new Movement(m.mount, m.type, m.concept, m.date, m.user_email, m.id));
+          var allMovements = response.map(m => new Movement(m.mount, m.type, m.category, m.concept, m.date, m.user_email, m.id));
           this.movements = allMovements;
           console.log("actualizo movimientos")
           console.log(allMovements);
@@ -78,14 +78,23 @@ export class MovementsApiClient {
     return this.movements;
   }
 
-  edit(mount: number, oldMount: number, type: string, concept: string, id: string) {
+  getTypeList(type: string): Movement[] {
+    return this.movements.filter(movement => movement.type === type);
+  }
+
+  getCategoryList(category: number): Movement[] {
+    return this.movements.filter(movement => movement.category === category);
+  }
+
+  edit(mount: number, oldMount: number, type: string, category: number, concept: string, id: string) {
     const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('GET', this.config.apiEndpoint + '/edit?mount=' + mount + '&concept=' + concept + '&id=' + id, { headers: headers });
+    const req = new HttpRequest('GET', this.config.apiEndpoint + '/edit?mount=' + mount + '&category=' + category + '&concept=' + concept + '&id=' + id, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         let movement: Movement = this.movements.find(movement => movement.id == id);
         movement.setMount(mount);
         movement.setConcept(concept);
+        movement.setCategory(category);
         let oldBalance = this.balance.getValue();
         if (type == "Ingreso") {
           this.balance.next((oldBalance - oldMount) + mount);

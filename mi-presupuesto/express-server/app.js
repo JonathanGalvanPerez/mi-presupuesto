@@ -76,6 +76,16 @@ app.get("/allMovements", (req, res, next) => {
 	});
 });
 
+app.get("/categoryList", (req, res, next) => {
+	var query = connection.query("SELECT * FROM movements WHERE user_email=? AND category=? ORDER BY date", [req.query.user_email, req.query.category], (error, result) => {
+		if(error){
+			throw error;
+		}else{
+			res.json(result);
+		}
+	});
+});
+
 app.post("/updateBalance", (req, res, next) => {
 	console.log("Request recibida! contenido:");
 	console.log(req.body);
@@ -89,8 +99,8 @@ app.post("/updateBalance", (req, res, next) => {
 });
 
 app.post("/add", (req, res, next) => {
-	var query = connection.query("INSERT INTO movements(id, mount, type, concept, date, user_email) VALUES(?,?,?,?,?,?)",
-		[req.body.id, req.body.mount, req.body.type, req.body.concept, req.body.date, req.body.user_email], (error, result) => {
+	var query = connection.query("INSERT INTO movements(id, mount, type, category, concept, date, user_email) VALUES(?,?,?,?,?,?,?)",
+		[req.body.id, req.body.mount, req.body.type, req.body.category, req.body.concept, req.body.date, req.body.user_email], (error, result) => {
 		if(error) {
 			throw error;
 		}else{
@@ -100,7 +110,7 @@ app.post("/add", (req, res, next) => {
 });
 
 app.get("/edit", (req, res, next) => {
-	var query = connection.query("UPDATE movements SET mount=?, concept=? WHERE id=?", [req.query.mount, req.query.concept, req.query.id], (error, result) => {
+	var query = connection.query("UPDATE movements SET mount=?, category=?, concept=? WHERE id=?", [req.query.mount, req.query.category, req.query.concept, req.query.id], (error, result) => {
 		if(error) {
 			throw error;
 		}else{
