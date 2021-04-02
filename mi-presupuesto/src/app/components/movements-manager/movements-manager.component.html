@@ -1,17 +1,27 @@
 <div>
 	<h2>Historial de Movimientos</h2>
-		<a class="btn btn-success" (click)="add()">Nueva transferencia</a>	
-		<ul>
-			<li *ngFor="let m of movementsApiClient.getAllMovements()">
-				<app-movement
-					[mount] = 'm.mount'
-					[concept] = 'm.concept'
-					[date] = 'm.date'
-					[type] = 'm.type'
-					[id] = 'm.id'
-					[edit] = 'true'>
-				</app-movement>
-			</li>
-		</ul>
-
+	<select class="form-control" [(ngModel)]="typeSelected" (ngModelChange)="typeSelection()">
+		<option value="">Todos</option>
+		<option value="Ingreso">Ingreso</option>
+		<option value="Egreso">Egreso</option>
+	</select>
+	<select class="form-control" [(ngModel)]="categorySelected" (ngModelChange)="categorySelection()">
+		<option value="0">Todos</option>
+		<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
+	</select>
+	<h2>{{categorySelected}}</h2>
+	<a class="btn btn-success" (click)="add()">Nueva transferencia</a>	
+	<ul>
+		<li *ngFor="let m of movements">
+			<app-movement
+				[mount] = 'm.mount'
+				[type] = 'm.type'
+				[category_id] = 'm.category'
+				[concept] = 'm.concept'
+				[date] = 'm.date'
+				[id] = 'm.id'
+				[edit] = 'true'>
+			</app-movement>
+		</li>
+	</ul>
 </div>
