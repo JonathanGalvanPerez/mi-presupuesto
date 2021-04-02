@@ -2,6 +2,7 @@ import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef } from '@a
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormEditMovementComponent } from '../form-edit-movement/form-edit-movement.component';
 import { MovementsApiClient } from '../../services/movements-api-client.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-movement',
@@ -11,16 +12,18 @@ import { MovementsApiClient } from '../../services/movements-api-client.service'
 export class MovementComponent implements OnInit {
 	@Input() mount: number;
   @Input() type: string;
+  @Input() category_id: number;
 	@Input() concept: string;
   @Input() date: string;
 	@Input() edit: boolean;
   @Input() id: string;
 	@ViewChild('dark_screen') dark_screen: ElementRef;
+  category_name: string;
 
-  constructor(private modalService: NgbModal, private movementsApiClient: MovementsApiClient) {
-  }
+  constructor(private modalService: NgbModal, private movementsApiClient: MovementsApiClient) {}
 
   ngOnInit(): void {
+    this.category_name = Category.getCategoryName(this.type, this.category_id);
   }
 
   showDarkScreen() {
@@ -35,6 +38,7 @@ export class MovementComponent implements OnInit {
     const modalRef = this.modalService.open(FormEditMovementComponent);
     modalRef.componentInstance.mount = this.mount;
     modalRef.componentInstance.type = this.type;
+    modalRef.componentInstance.category = this.category_id;
     modalRef.componentInstance.concept = this.concept;
     modalRef.componentInstance.id = this.id;
   }

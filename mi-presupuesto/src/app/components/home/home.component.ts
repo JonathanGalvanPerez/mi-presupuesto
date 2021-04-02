@@ -16,10 +16,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {}
 
   getMovements() {
-  	var lista = this.movementsApiClient.getLastMovements();
-  	console.log("home recibio");
-  	console.log(lista);
-  	return lista;
+  	return this.movementsApiClient.getLastMovements();
   }
 
   trackElement(index: number, element: any) {

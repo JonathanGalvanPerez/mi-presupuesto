@@ -18,14 +18,19 @@
 		<div class="edit-button" (click)="editClick()">Editar</div>
 		<div class="delete-button" (click)="deleteClick(deleteModal)">Eliminar</div>
 	</div>
-	<div class="col-6 col-md-3">
+	<div class="col-4 col-md-2">
 		<div class="tag d-block">Monto</div>
 		<div>{{ mount }}</div>
 	</div>
 	<div class="vl"></div>
-	<div class="col-6 col-md-3">
+	<div class="col-4 col-md-2">
 		<div class="tag d-block">Tipo</div>
 		<div>{{ type }}</div>
+	</div>
+	<div class="vl"></div>
+	<div class="col-4 col-md-2">
+		<div class="tag d-block">Categoria</div>
+		{{ category_name }}
 	</div>
 	<div class="vl"></div>
 	<div class="col-6 col-md-3">

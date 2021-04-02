@@ -4,9 +4,11 @@
 	flex-wrap: wrap;
 	background-color: skyblue;
 	border-radius: 10px;
-	width: 80%;
 	margin: 10px;
 	padding-bottom: 5px;
+}
+.movement-container div {
+	padding: 0;
 }
 .tag {
 	font-size: 14px;

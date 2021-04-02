@@ -9,9 +9,10 @@
 			<li *ngFor="let m of getMovements(); trackBy: trackElement">
 				<app-movement
 					[mount] = 'm.mount'
+					[type] = 'm.type'
+					[category_id] = 'm.category'
 					[concept] = 'm.concept'
-					[date] = 'm.date'
-					[type] = 'm.type'>
+					[date] = 'm.date'>
 				</app-movement>
 			</li>
 		</ul>

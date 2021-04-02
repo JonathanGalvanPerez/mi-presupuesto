@@ -16,12 +16,20 @@
 		</div>
 		<div class="form-group">
 			<label for="type">Tipo</label>
-			<select formControlName="type" class="form-control" required>
+			<select formControlName="type" class="form-control" (change)="updateCategory()">
 				<option [ngValue]="''" selected>Seleccione un tipo de transferencia</option>
 				<option [ngValue]="'Ingreso'">Ingreso</option>
 				<option [ngValue]="'Egreso'">Egreso</option>
 			</select>
 			<div class="alert alert-danger" *ngIf="fg.controls['type'].invalid && fg.controls['type'].touched">Por favor seleccione un tipo de transferencia.</div>
+		</div>
+		<div class="form-group">
+			<label for="type">Categoria</label>
+			<select formControlName="category" class="form-control">
+				<option [ngValue]="''" selected>Seleccione una categoria</option>
+				<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
+			</select>
+			<div class="alert alert-danger" *ngIf="fg.controls['category'].invalid && fg.controls['category'].touched">Por favor seleccione una categoria.</div>
 		</div>
 		<div class="form-group">
 			<label for="concept">Concepto</label>
