@@ -1,21 +1,25 @@
 <div class="container">
-  <div class="row">
-    <h1 class="titulo mx-auto">
-      {{ title }}
-    </h1>
-    <nav class="navbar navbar-light container-fluid">
-      <ul class="navbar-nav flex-row mr-auto">
-      	<li class="nav-item">
-      		<a class="nav-link" [routerLink]="['home']">Home</a>
-      	</li>
-    		<li class="nav-item">
-    			<a class="nav-link" [routerLink]="['gestor-movimientos']">Gestor de Movimientos</a>
-    		</li>
-        <li class="nav-item">
-          <a class="nav-link" *ngIf="authService.isLoggedIn()" (click)="authService.logOut()" [routerLink]="['login']">Cerrar Sesion</a>
-        </li>
-      </ul>
+  <header class="row">
+    <nav class="navbar navbar-dark navbar-expand-md">
+      <a class="navbar-brand" href="#">
+        <h1 class="titulo d-none d-sm-block"><span>Mi </span>Presupuesto</h1>
+        <h2 class="titulo d-block d-sm-none"><span>Mi</span>Presupuesto</h2>
+      </a>
+      <button class="navbar-toggler" type="button" (click)="toggleCollapse()"><span class="navbar-toggler-icon"></span></button>
+      <div class="navbar-collapse" [ngClass]="isCollapse? 'collapse': 'deployed'" id="navbarNav">
+        <ul class="navbar-nav flex">
+        	<li class="nav-item">
+        		<a class="nav-link" [routerLink]="['home']" (click)="toggleCollapse()"><span class="material-icons">home</span>Inicio</a>
+        	</li>
+      		<li class="nav-item">
+      			<a class="nav-link" [routerLink]="['gestor-movimientos']" (click)="toggleCollapse()"><span class="material-icons">dashboard_customize</span>Gestor de Movimientos</a>
+      		</li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="authService.isLoggedIn()" (click)="authService.logOut();toggleCollapse()" [routerLink]="['login']"><span class="material-icons">logout</span>Cerrar Sesion</a>
+          </li>
+        </ul>
+      </div>
     </nav>
-  </div>
+  </header>
   <router-outlet></router-outlet>
 </div>

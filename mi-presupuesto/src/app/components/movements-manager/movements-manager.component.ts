@@ -28,8 +28,6 @@ export class MovementsManagerComponent implements OnInit {
   }
 
   typeSelection() {
-  	console.log("Se actualizo las categorias. Type:");
-  	console.log(this.typeSelected);
   	this.categorySelected = 0;
   	if(this.typeSelected == "") {
   		this.movements = this.movementsApiClient.getAllMovements();

@@ -1,17 +1,26 @@
 <div>
-	<h2>Historial de Movimientos</h2>
-	<select class="form-control" [(ngModel)]="typeSelected" (ngModelChange)="typeSelection()">
-		<option value="">Todos</option>
-		<option value="Ingreso">Ingreso</option>
-		<option value="Egreso">Egreso</option>
-	</select>
-	<select class="form-control" [(ngModel)]="categorySelected" (ngModelChange)="categorySelection()">
-		<option value="0">Todos</option>
-		<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
-	</select>
-	<h2>{{categorySelected}}</h2>
-	<a class="btn btn-success" (click)="add()">Nueva transferencia</a>	
-	<ul>
+	<h2 class="my-3">Gestor de Movimientos</h2>
+	<div class="row row-cols-1 row-cols-md-2 m-1">
+		<button class="btn btn-success mb-3 col-12 col-md-8" (click)="add()">
+			<span class="material-icons">add_circle_outline</span>Nueva transferencia
+		</button>
+		<div class="col selector p-md-2">
+			<label class="mr-2">Tipo: </label>
+			<select class="form-control col-8 col-md" [(ngModel)]="typeSelected" (ngModelChange)="typeSelection()">
+				<option value="">Todos</option>
+				<option value="Ingreso">Ingreso</option>
+				<option value="Egreso">Egreso</option>
+			</select>
+		</div>
+		<div class="col selector p-md-2">
+			<label class="mr-2">Categoria: </label>
+			<select class="form-control col-8 col-md" [(ngModel)]="categorySelected" (ngModelChange)="categorySelection()">
+				<option value="0">Todos</option>
+				<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
+			</select>
+		</div>
+	</div>
+	<ul class="my-1">
 		<li *ngFor="let m of movements">
 			<app-movement
 				[mount] = 'm.mount'
@@ -23,5 +32,5 @@
 				[edit] = 'true'>
 			</app-movement>
 		</li>
-	</ul>
+	</ul>	
 </div>

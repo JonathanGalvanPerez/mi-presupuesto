@@ -7,6 +7,12 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'mi-presupuesto';
+  isCollapse = true;
+
   constructor(public authService: AuthService) {}
+
+  toggleCollapse() {
+  	if (screen.width < 768)
+	  	this.isCollapse = !this.isCollapse;
+  }
 }

@@ -1,4 +1,13 @@
-.card {
+button {
+	display: flex;
 	margin: 0 auto;
+	font-size: 1.1rem;
+}
+label {
+	display: flex;
+	justify-content: center;
+}
+.card {
+	margin: 20px auto;
 	padding: 0;
 }
