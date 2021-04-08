@@ -5,7 +5,7 @@
 	</button>
 </div>
 <div class="modal-content">
-	<form [formGroup]="fg" (ngSubmit)="save()" class="col-12 col-sm-8 mx-auto">
+	<form [formGroup]="fg" (ngSubmit)="save()" class="col-12 col-sm-8 mx-auto py-3">
 		<div class="form-group">
 			<label for="mount">Monto</label>
 			<input type="number" step="10" autocomplete="off" class="form-control" formControlName="mount" ngbAutofocus>
@@ -26,6 +26,6 @@
 			<input type="text" autocomplete="off" class="form-control" formControlName="concept">
 			<div class="alert alert-danger" *ngIf="fg.controls['concept'].invalid && fg.controls['concept'].touched">Por favor ingrese un concepto.</div>
 		</div>
-		<button	type="submit" class="btn btn-primary col-12 col-sm-8 my-3" [disabled]="!fg.valid">Guardar Cambios</button>
+		<button	type="submit" class="btn btn-primary w-100 py-2" [disabled]="!fg.valid">Guardar Cambios</button>
 	</form>
 </div>
