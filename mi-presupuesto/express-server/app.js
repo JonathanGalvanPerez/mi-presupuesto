@@ -87,8 +87,6 @@ app.get("/categoryList", (req, res, next) => {
 });
 
 app.post("/updateBalance", (req, res, next) => {
-	console.log("Request recibida! contenido:");
-	console.log(req.body);
 	var query = connection.query("UPDATE accounts SET balance=? WHERE email=?", [req.body.balance, req.body.email], (error, result) => {
 		if(error) {
 			throw error;

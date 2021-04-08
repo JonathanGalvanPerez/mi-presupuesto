@@ -69,8 +69,7 @@ export class MovementsApiClient {
       }
     });
     return null;*/
-    console.log("Api envia");
-    console.log(this.movements);
+    console.log("Se actualizo la lista");
     return this.movements.slice(0,10);
   }
 
@@ -159,4 +158,5 @@ export class MovementsApiClient {
 
   getBalance = () => this.balance;
   getName = () => this.name;
+  getEmail = () => this.email;
 }
