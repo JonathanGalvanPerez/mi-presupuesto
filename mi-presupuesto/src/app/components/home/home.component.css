@@ -1,0 +1,47 @@
+.data {
+	margin: 15px 5px;
+	border-radius: 15px;
+	border: 3px solid black;
+	overflow: hidden;
+}
+.info { 
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #0288d1;
+	font-family: 'Roboto';
+	font-size: 18px;
+	outline: 2px solid black;;
+}
+.balance {
+	background-color: #bbdefb;
+	outline: 2px solid black;
+}
+.balance h3, .date h3 {
+	background-color: #3846FC;
+	color: white;
+	padding: 6px 0;
+}
+.balance h4 {
+	padding: 15px;
+}
+.balance, .info {
+	z-index: 1;
+}
+.date {
+	background-color: #bbdefb;
+	outline: 2px solid black;
+}
+.date h3 {
+	margin: 0;
+	padding: 6px;
+}
+.name {
+	font-weight: bold;
+	font-size: 1.5rem;
+	color: white;
+}
+ul {
+	margin: 0;
+}

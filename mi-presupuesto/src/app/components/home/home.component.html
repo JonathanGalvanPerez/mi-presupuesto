@@ -1,10 +1,22 @@
 <div>
 	<section>
-		<h2>Balance Actual</h2>
-		<h3>{{ balance }}</h3>
+		<div class="data d-flex flex-wrap">
+			<div class="info col-12 col-sm order-1 order-sm-3 py-4 py-sm-2">
+				<div class="my-sm-2 name">{{ name }}</div>
+				<div class="my-sm-2 text-white-50">E-mail: {{ email }}</div>
+			</div>
+			<div class="balance order-2 col-12 col-sm p-0">
+				<h3><span class="material-icons"><span class="material-icons">monetization_on</span></span>Balance Actual</h3>
+				<h2 class="py-sm-3">${{ balance }}</h2>
+			</div>
+			<div class="date order-3 col-12 col-lg d-flex flex-wrap p-0">
+				<h3 class="col-12 col-sm-4 col-lg-12"><span class="material-icons">calendar_today</span>Fecha</h3>
+				<h2 class="col py-lg-4">{{ date }}</h2>
+			</div>
+		</div>
 	</section>
 	<section>
-		<h2>Ultimos Movimientos</h2>
+		<h2>Últimos Movimientos</h2>
 		<ul>
 			<li *ngFor="let m of getMovements(); trackBy: trackElement">
 				<app-movement
