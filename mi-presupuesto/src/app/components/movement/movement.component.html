@@ -13,33 +13,39 @@
     <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Eliminar</button>
   </div>
 </ng-template>
-<div class="movement-container mx-auto" (mouseover)="showDarkScreen()" (mouseout)="hideDarkScreen()">
-	<div #dark_screen class="dark-screen">
-		<div class="edit-button" (click)="editClick()">Editar</div>
-		<div class="delete-button" (click)="deleteClick(deleteModal)">Eliminar</div>
+<div class="movement-container mx-auto" [class.movement-editable]="edit">
+	<div class="screen dark" [class.d-flex]="displayOptions">
+		<button class="edit-button" (click)="editClick()">
+			<span class="material-icons">edit</span>Editar
+		</button>
+		<button class="delete-button" (click)="deleteClick(deleteModal)">
+			<span class="material-icons">delete</span>Eliminar
+		</button>
+		<button class="cancel-button d-md-none" (click)="hideOptions()" *ngIf="edit">
+			<span class="material-icons">close</span>
+		</button> 
 	</div>
-	<div class="col-4 col-md-2">
+	<div class="cell col">
 		<div class="tag d-block">Monto</div>
-		<div>{{ mount }}</div>
+		<div>${{ mount }}</div>
 	</div>
 	<div class="vl"></div>
-	<div class="col-4 col-md-2">
+	<div class="cell col">
 		<div class="tag d-block">Tipo</div>
 		<div>{{ type }}</div>
 	</div>
-	<div class="vl"></div>
-	<div class="col-4 col-md-2">
+	<div class="cell col">
 		<div class="tag d-block">Categoria</div>
 		{{ category_name }}
 	</div>
-	<div class="vl"></div>
-	<div class="col-6 col-md-3">
+	<div class="w-100 d-md-none"></div>
+	<div class="cell col">
 		<div class="tag d-block">Concepto</div>
 		{{ concept }}
 	</div>
-	<div class="vl"></div>
-	<div class="col-6 col-md-3">
+	<div class="cell col">
 		<div class="tag d-block">Fecha</div>
 		{{ date }}
 	</div>
+	<button class="col-4 d-md-none options" [class.d-none]="!edit" (click)="showOptions()"><span class="material-icons">settings</span>Opciones</button>
 </div>

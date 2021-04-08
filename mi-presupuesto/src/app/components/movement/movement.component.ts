@@ -17,24 +17,27 @@ export class MovementComponent implements OnInit {
   @Input() date: string;
 	@Input() edit: boolean;
   @Input() id: string;
-	@ViewChild('dark_screen') dark_screen: ElementRef;
+  displayOptions: boolean;
   category_name: string;
 
-  constructor(private modalService: NgbModal, private movementsApiClient: MovementsApiClient) {}
+  constructor(private modalService: NgbModal, private movementsApiClient: MovementsApiClient) {
+    this.displayOptions = false;
+  }
 
   ngOnInit(): void {
     this.category_name = Category.getCategoryName(this.type, this.category_id);
   }
 
-  showDarkScreen() {
-  	if (this.edit) {
-  		this.dark_screen.nativeElement.style.display = 'flex';
-  	}
+  showOptions() {
+ 		this.displayOptions = true;
   }
-  hideDarkScreen() {
-  	this.dark_screen.nativeElement.style.display = 'none';
+
+  hideOptions() {
+  	this.displayOptions = false;
   }
+
   editClick() {
+    this.displayOptions = false;
     const modalRef = this.modalService.open(FormEditMovementComponent);
     modalRef.componentInstance.mount = this.mount;
     modalRef.componentInstance.type = this.type;
@@ -42,13 +45,13 @@ export class MovementComponent implements OnInit {
     modalRef.componentInstance.concept = this.concept;
     modalRef.componentInstance.id = this.id;
   }
+
   deleteClick(deleteModal) {
     console.log("Se hizo click en el boton delete")
+    this.displayOptions = false;
     const modalRef = this.modalService.open(deleteModal, { ariaLabelledBy: 'modal-title' });
     modalRef.result.then((result) => {
-      console.log("Se cerro el modal")
       if (result == 'delete') {
-        console.log("Se llamo a delete de movementsApiClient");
         this.movementsApiClient.delete(this.id);
       }
     }, () => {});
