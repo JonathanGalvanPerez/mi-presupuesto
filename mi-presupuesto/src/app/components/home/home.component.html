@@ -17,6 +17,7 @@
 	</section>
 	<section>
 		<h2>Últimos Movimientos</h2>
+		<p *ngIf="!getMovements().length">Usted no ha realizado ninguna transacción.<p>
 		<ul>
 			<li *ngFor="let m of getMovements(); trackBy: trackElement">
 				<app-movement

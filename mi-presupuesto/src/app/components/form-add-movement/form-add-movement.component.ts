@@ -1,5 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Inject, forwardRef } from '@angular/core';
-import { formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MovementsApiClient } from '../../services/movements-api-client.service';
@@ -34,7 +33,7 @@ export class FormAddMovementComponent implements OnInit {
     let type = this.fg.controls['type'].value;
     let category = this.fg.controls['category'].value;
     let concept = this.fg.controls['concept'].value;
-  	let date = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+  	let date = new Date();
     let user_mail = localStorage.getItem('userLog');
     let movement = new Movement(mount, type, category, concept, date, user_mail);
   	this.movementsApiClient.add(movement);
@@ -56,6 +55,6 @@ export class FormAddMovementComponent implements OnInit {
 
   mountValidator(control: FormControl): { [s: string]: boolean } {
   	let l = (control.value as number);
-  	return (l > 0 && l < 100000)? null: { invalidMount: true };
+  	return (l > 0 && l < 500000)? null: { invalidMount: true };
   }
 }

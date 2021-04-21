@@ -45,6 +45,6 @@ export class FormEditMovementComponent implements OnInit {
 
   mountValidator(control: FormControl): { [s: string]: boolean } {
   	let l = (control.value as number);
-  	return (l > 0 && l < 100000)? null: { invalidMount: true };
+  	return (l > 0 && l < 500000)? null: { invalidMount: true };
   }
 }
