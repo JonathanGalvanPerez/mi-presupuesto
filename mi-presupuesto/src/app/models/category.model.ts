@@ -1,18 +1,18 @@
 export class Category {
 	static categories_ingress = new Map([
-		[1, 'salario'],
-		[2, 'transferencia'],
-		[3, 'otros']
+		[1, 'Salario'],
+		[2, 'Transferencia'],
+		[3, 'Otros']
 	]);
 	static categories_egress = new Map([
-	  [4, 'gastronomia'],
-	  [5, 'entretenimiento'],
-	  [6, 'indumentaria'],
-	  [7, 'compras'],
-	  [8, 'servicios'],
-	  [9, 'transporte'],
-	  [10, 'alquiler'],
-	  [11, 'otros']
+	  [4, 'Gastronomia'],
+	  [5, 'Entretenimiento'],
+	  [6, 'Indumentaria'],
+	  [7, 'Compras'],
+	  [8, 'Servicios'],
+	  [9, 'Transporte'],
+	  [10, 'Alquiler'],
+	  [11, 'Otros']
   ]);
 
 	static getCategories(type: string) {

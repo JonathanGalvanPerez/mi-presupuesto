@@ -23,6 +23,7 @@
 	<ul class="my-1">
 		<li *ngFor="let m of movements">
 			<app-movement
+				(deleteMovement) = "movementsApiClient.delete($event)"
 				[mount] = 'm.mount'
 				[type] = 'm.type'
 				[category_id] = 'm.category'

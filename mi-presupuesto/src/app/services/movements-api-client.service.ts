@@ -50,8 +50,6 @@ export class MovementsApiClient {
           var response: any = data.body;
           var allMovements = response.map(m => new Movement(m.mount, m.type, m.category, m.concept, m.date, m.user_email, m.id));
           this.movements = allMovements;
-          console.log("actualizo movimientos")
-          console.log(allMovements);
           resolve();
         }
       });
@@ -59,16 +57,6 @@ export class MovementsApiClient {
   }
 
   getLastMovements(): Movement[] {
-    /*const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('GET', this.config.apiEndpoint + '/lastMovements?user_email=jorge@email.com', { headers: headers });
-    this.http.request(req).subscribe((data: HttpResponse<{}>) => {
-      if(data.status === 200) {
-        let response: any = data.body;
-        this.lastMovements = response.map(m => new Movement(m.mount, m.type, m.concept, m.date, m.user_email, m.id));
-        return this.lastMovements;
-      }
-    });
-    return null;*/
     console.log("Se actualizo la lista");
     return this.movements.slice(0,10);
   }

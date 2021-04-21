@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MovementsApiClient } from '../../services/movements-api-client.service';
 import { FormAddMovementComponent } from '../form-add-movement/form-add-movement.component';
+import { Movement } from '../../models/movement.model'
 import { Category } from '../../models/category.model';
 
 @Component({
@@ -10,7 +11,7 @@ import { Category } from '../../models/category.model';
   styleUrls: ['./movements-manager.component.css']
 })
 export class MovementsManagerComponent implements OnInit {
-	movements: any[];
+	movements: Movement[];
 	categories: Map<number, string>;
 	categorySelected = 0;
 	typeSelected = "";
