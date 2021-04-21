@@ -23,7 +23,7 @@ node app.js
 ```
 _Dentro de la carpeta **/mi-presupuesto**_
 ```
-`ng serve`
+ng serve
 ```
 
 ## Tecnologías empleadas
