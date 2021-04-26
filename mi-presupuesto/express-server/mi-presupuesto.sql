@@ -2,8 +2,8 @@
 -- Base de datos: `mi-presupuesto`
 --
 
-CREATE DATABASE IF NOT EXISTS `mi-presupuesto2`;
-USE `mi-presupuesto2`;
+CREATE DATABASE IF NOT EXISTS `mi-presupuesto`;
+USE `mi-presupuesto`;
 
 -- --------------------------------------------------------
 

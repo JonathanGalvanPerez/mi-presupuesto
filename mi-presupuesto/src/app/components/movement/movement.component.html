@@ -1,18 +1,3 @@
-<ng-template #deleteModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Eliminar Movimento</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-  	¿Está seguro/a que desea eliminar este registro?
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancelar</button>
-    <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Eliminar</button>
-  </div>
-</ng-template>
 <div class="movement-container mx-auto" [class.movement-editable]="edit">
 	<div class="screen dark" [class.d-flex]="displayOptions">
 		<button class="edit-button" (click)="editClick()">
@@ -45,7 +30,23 @@
 	</div>
 	<div class="cell col">
 		<div class="tag d-block">Fecha</div>
-		{{ formattedDate }}
+		{{ date | date:"dd/MM/yyyy" }}
 	</div>
-	<button class="col-4 col-md-2 d-lg-none options" [class.d-none]="!edit" (click)="showOptions()"><span class="material-icons mr-0">settings</span>Opciones</button>
+	<button class="col-4 col-md-2 d-lg-none options" [class.d-none]="!edit" (click)="showOptions()"><span class="material-icons mr-0">construction</span>Opciones</button>
 </div>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Eliminar Movimento</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  	¿Está seguro/a que desea eliminar este registro?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Eliminar</button>
+  </div>
+</ng-template>

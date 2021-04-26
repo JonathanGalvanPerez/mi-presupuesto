@@ -19,7 +19,6 @@ export class MovementComponent implements OnInit {
   @Input() id: string;
   @Output() deleteMovement: EventEmitter<string>;
   displayOptions: boolean;
-  formattedDate: string;
   category_name: string;
 
   constructor(private modalService: NgbModal) {
@@ -29,7 +28,6 @@ export class MovementComponent implements OnInit {
 
   ngOnInit(): void {
     this.category_name = Category.getCategoryName(this.type, this.category_id);
-    this.formattedDate = formatDate(this.date, 'dd/MM/yyyy', 'en');
   }
 
   showOptions() {
