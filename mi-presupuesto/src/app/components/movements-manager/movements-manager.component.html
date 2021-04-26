@@ -21,7 +21,7 @@
 		</div>
 	</div>
 	<ul class="my-1">
-		<li *ngFor="let m of movements">
+		<li *ngFor="let m of movementsSelected">
 			<app-movement
 				(deleteMovement) = "movementsApiClient.delete($event)"
 				[mount] = 'm.mount'

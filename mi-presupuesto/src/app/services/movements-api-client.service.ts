@@ -13,12 +13,14 @@ export class MovementsApiClient {
   name: string;
   balance: BehaviorSubject<number>;
   movements: Movement[];
+  movements$: BehaviorSubject<Movement[]>;
 
   constructor(@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig, private http: HttpClient) {
     this.balance = new BehaviorSubject<number>(0);
+    this.movements$ = new BehaviorSubject<Movement[]>([]);
   }
 
-  async loadAccount(): Promise<void> {
+  loadAccount(): Promise<void> {
     this.email = localStorage.getItem('userLog');
     if (this.email === null) {
       console.log("userLog no existe. No se cargan los datos");
@@ -50,27 +52,11 @@ export class MovementsApiClient {
           var response: any = data.body;
           var allMovements = response.map(m => new Movement(m.mount, m.type, m.category, m.concept, m.date, m.user_email, m.id));
           this.movements = allMovements;
+          this.movements$.next(this.movements);
           resolve();
         }
       });
     });
-  }
-
-  getLastMovements(): Movement[] {
-    console.log("Se actualizo la lista");
-    return this.movements.slice(0,10);
-  }
-
-  getAllMovements(): Movement[] {
-    return this.movements;
-  }
-
-  getTypeList(type: string): Movement[] {
-    return this.movements.filter(movement => movement.type === type);
-  }
-
-  getCategoryList(category: number): Movement[] {
-    return this.movements.filter(movement => movement.category === category);
   }
 
   edit(mount: number, oldMount: number, type: string, category: number, concept: string, id: string) {
@@ -82,13 +68,14 @@ export class MovementsApiClient {
         movement.setMount(mount);
         movement.setConcept(concept);
         movement.setCategory(category);
+        this.movements$.next(this.movements);
+        console.log("se edito el registro");
         let oldBalance = this.balance.getValue();
         if (type == "Ingreso") {
           this.balance.next((oldBalance - oldMount) + mount);
         } else {
           this.balance.next((oldBalance + oldMount) - mount);
         }
-        console.log("Se modifico el balance");
         this.updateBalance();
       }
     });
@@ -100,6 +87,8 @@ export class MovementsApiClient {
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         this.movements.unshift(movement);
+        this.movements$.next(this.movements);
+        console.log("se agrego el registro");
         let balance = this.balance.getValue();
         if (movement.type == "Ingreso") {
           this.balance.next(balance + movement.mount);
@@ -117,9 +106,10 @@ export class MovementsApiClient {
     const req = new HttpRequest('GET', this.config.apiEndpoint + '/delete?id=' + id, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
-        console.log("se elimino el registro");
         let index = this.movements.findIndex(movement => movement.id === id);
         let deleted = this.movements.splice(index, 1);
+        this.movements$.next(this.movements);
+        console.log("se elimino el registro");
         let oldBalance = this.balance.getValue();
         if(deleted[0].type === 'Ingreso')
           this.balance.next(oldBalance-deleted[0].mount);
@@ -144,7 +134,10 @@ export class MovementsApiClient {
     this.balance.subscribe(fn);
   }
 
-  getBalance = () => this.balance;
+  subscribeOnChangeMovements(fn) {
+    this.movements$.subscribe(fn);
+  }
+
   getName = () => this.name;
   getEmail = () => this.email;
 }

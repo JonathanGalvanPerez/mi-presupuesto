@@ -12,13 +12,20 @@ import { Category } from '../../models/category.model';
 })
 export class MovementsManagerComponent implements OnInit {
 	movements: Movement[];
+  movementsSelected: Movement[];
 	categories: Map<number, string>;
 	categorySelected = 0;
 	typeSelected = "";
 
   constructor(public movementsApiClient: MovementsApiClient, private modalService: NgbModal) {
   	this.categories = Category.getCategories("");
-  	this.movements = movementsApiClient.getAllMovements();
+  	this.movementsApiClient.subscribeOnChangeMovements(movements => {
+      this.movements = movements;
+      this.movementsSelected = movements;
+      this.categorySelected = 0;
+      this.typeSelected = "";
+    });
+    this.movementsSelected = this.movements;
   }
 
   ngOnInit(): void {
@@ -31,10 +38,10 @@ export class MovementsManagerComponent implements OnInit {
   typeSelection() {
   	this.categorySelected = 0;
   	if(this.typeSelected == "") {
-  		this.movements = this.movementsApiClient.getAllMovements();
+  		this.movementsSelected = this.movements;
   		this.categories = Category.getCategories("");
   	}	else {
-	  	this.movements = this.movementsApiClient.getTypeList(this.typeSelected);
+	  	this.filterType(this.typeSelected);
 	 		this.categories = Category.getCategories(this.typeSelected);
 	 	}
   }
@@ -42,11 +49,19 @@ export class MovementsManagerComponent implements OnInit {
   categorySelection() {
   	if(this.categorySelected == 0) {
   		if(this.typeSelected == "")
-	  		this.movements = this.movementsApiClient.getAllMovements();
+	  		this.movementsSelected = this.movements;
 	  	else
-	  		this.movements = this.movementsApiClient.getTypeList(this.typeSelected);
+	  		this.filterType(this.typeSelected);
   	} else {
-  		this.movements = this.movementsApiClient.getCategoryList(this.categorySelected);
+  		this.filterCategory(this.categorySelected);
   	}
+  }
+
+  filterType(type: string) {
+    this.movementsSelected = this.movements.filter(movement => movement.type === type);
+  }
+
+  filterCategory(category: number) {
+    this.movementsSelected = this.movements.filter(movement => movement.category === category);
   }
 }

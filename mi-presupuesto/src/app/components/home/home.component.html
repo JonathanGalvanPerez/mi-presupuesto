@@ -11,15 +11,15 @@
 			</div>
 			<div class="date order-3 col-12 col-lg d-flex flex-wrap p-0">
 				<h3 class="col-12 col-sm-4 col-lg-12"><span class="material-icons">calendar_today</span>Fecha</h3>
-				<h2 class="col py-lg-4">{{ date }}</h2>
+				<h2 class="col py-lg-4">{{ today | date:"dd/MM/yyyy" }}</h2>
 			</div>
 		</div>
 	</section>
 	<section>
 		<h2>Últimos Movimientos</h2>
-		<p *ngIf="!getMovements().length">Usted no ha realizado ninguna transacción.<p>
+		<p *ngIf="!movements.length">Usted no ha realizado ninguna transacción.<p>
 		<ul>
-			<li *ngFor="let m of getMovements(); trackBy: trackElement">
+			<li *ngFor="let m of movements; trackBy: trackElement">
 				<app-movement
 					[mount] = 'm.mount'
 					[type] = 'm.type'
