@@ -12,10 +12,10 @@ import { Category } from '../../models/category.model';
   styleUrls: ['./form-edit-movement.component.css']
 })
 export class FormEditMovementComponent implements OnInit {
-	@Input() mount: number;
+	@Input() initialMount: number;
 	@Input() type: string;
-  @Input() category: string;
-	@Input() concept: string;
+  @Input() initialCategory: string;
+	@Input() initialConcept: string;
 	@Input() id: string;
 	fg: FormGroup;
   categories: Map<number, string>;
@@ -24,22 +24,22 @@ export class FormEditMovementComponent implements OnInit {
 
   ngOnInit(): void {
     this.fg = this.fb.group({
-      mount: [this.mount, [
+      mount: [this.initialMount, [
         Validators.required,
         this.mountValidator
       ]],
-      category: [this.category],
-      concept: [this.concept, Validators.required]
+      category: this.initialCategory,
+      concept: [this.initialConcept, Validators.required]
     });
     this.categories = Category.getCategories(this.type);
   
   }
 
   save() {
-    let mount = this.fg.controls['mount'].value;
-    let category = this.fg.controls['category'].value;
-    let concept = this.fg.controls['concept'].value;
-  	this.movementsApiClient.edit(mount, this.mount, this.type, category, concept, this.id)
+    let mount = this.fg.get('mount').value;
+    let category = this.fg.get('category').value;
+    let concept = this.fg.get('concept').value;
+  	this.movementsApiClient.edit(mount, this.initialMount, this.type, category, concept, this.id)
   	this.activeModal.close('Close click');
   }
 
@@ -47,4 +47,17 @@ export class FormEditMovementComponent implements OnInit {
   	let l = (control.value as number);
   	return (l > 0 && l < 500000)? null: { invalidMount: true };
   }
+
+  get mount() {
+    return this.fg.get('mount');
+  }
+
+  get category() {
+    return this.fg.get('category');
+  }
+
+  get concept() {
+    return this.fg.get('concept');
+  }
+
 }

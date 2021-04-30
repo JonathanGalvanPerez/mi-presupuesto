@@ -23,16 +23,16 @@ export class FormAddMovementComponent implements OnInit {
         this.mountValidator
       ]],
       type: ['', Validators.required],
-      category: [{ value: '', disabled: true }, { validators: [Validators.required]}],
+      category: [{ value: '', disabled: true }, Validators.required],
       concept: ['', Validators.required]
     });
   }
 
   save() {
-    let mount = this.fg.controls['mount'].value;
-    let type = this.fg.controls['type'].value;
-    let category = this.fg.controls['category'].value;
-    let concept = this.fg.controls['concept'].value;
+    let mount = this.fg.get('mount').value;
+    let type = this.fg.get('type').value;
+    let category = this.fg.get('category').value;
+    let concept = this.fg.get('concept').value;
   	let date = new Date();
     let user_mail = localStorage.getItem('userLog');
     let movement = new Movement(mount, type, category, concept, date, user_mail);
@@ -41,15 +41,15 @@ export class FormAddMovementComponent implements OnInit {
   }
 
   updateCategory() {
-    let typeValue = this.fg.controls['type'].value;
-    this.fg.controls['category'].markAsUntouched();
+    let typeValue = this.fg.get('type').value;
+    this.fg.get('category').markAsUntouched();
     if (typeValue == "Ingreso" || typeValue == "Egreso") {
       this.categories = Category.getCategories(typeValue);
-      this.fg.controls['category'].setValue('');
-      this.fg.controls['category'].enable();
+      this.fg.get('category').setValue('');
+      this.fg.get('category').enable();
     } else {
-      this.fg.controls['category'].setValue('');
-      this.fg.controls['category'].disable();
+      this.fg.get('category').setValue('');
+      this.fg.get('category').disable();
     }
   }
 
@@ -57,4 +57,21 @@ export class FormAddMovementComponent implements OnInit {
   	let l = (control.value as number);
   	return (l > 0 && l < 500000)? null: { invalidMount: true };
   }
+
+  get mount() {
+    return this.fg.get('mount');
+  }
+
+  get type() {
+    return this.fg.get('type');
+  }
+
+  get category() {
+    return this.fg.get('category');
+  }
+
+  get concept() {
+    return this.fg.get('concept');
+  }
+
 }

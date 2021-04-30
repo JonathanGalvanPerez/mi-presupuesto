@@ -32,7 +32,7 @@ export class MovementsManagerComponent implements OnInit {
   }
 
   add() {
-  	const modalRef = this.modalService.open(FormAddMovementComponent);
+  	this.modalService.open(FormAddMovementComponent);
   }
 
   typeSelection() {

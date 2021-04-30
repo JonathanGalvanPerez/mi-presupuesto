@@ -1,3 +1,7 @@
+<div class="alert alert-success alert-dismissible" id="alert" role="alert" *ngIf="newAccountAlert">
+	Se ha creado su cuenta exitosamente. Ahora puede iniciar sesión.
+	<button type="button" class="close" aria-label="Close" (click)="newAccountAlert=false"><span aria-hidden="true">&times;</span></button>
+</div>
 <div class="card card-outline-secondary col-12 col-md-6">
 	<div class="card-header">
 		<h3	class="mb-0">Inicio de Sesión</h3>
@@ -6,18 +10,21 @@
 		<form [formGroup]="fg" (ngSubmit)="login()">
 			<div class="form-group">
 				<label for="email"><span class="material-icons">email</span>E-Mail: </label>
-				<input type="email" class="form-control" formControlName="email" autofocus>
-				<div *ngIf="fg.controls['email'].invalid && fg.controls['email'].touched">
-					<div class="alert alert-danger" *ngIf="fg.controls['email'].errors.invalidEmail">El E-mail no está registrado</div>
-					<div class="alert alert-danger" *ngIf="fg.controls['email'].errors.required">Por favor ingrese su E-Mail</div>
+				<input type="email" class="form-control" formControlName="email" autofocus required>
+				<div *ngIf="email.invalid && email.touched">
+					<div class="alert alert-danger" *ngIf="email.errors.invalidEmail">El E-mail no está registrado</div>
+					<div class="alert alert-danger" *ngIf="email.errors.required">Por favor ingrese su E-Mail</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="password"><span class="material-icons">lock</span>Contraseña: </label>
-				<input type="password" class="form-control" formControlName="password">
+				<input type="password" class="form-control" formControlName="password" required>
 				<div class="alert alert-danger" *ngIf="errorLog">Contraseña incorrecta</div>
 			</div>
 			<button type="submit" class="btn btn-success" [disabled]="fg.invalid"><span class="material-icons">login</span>Ingresar</button>
 		</form>
 	</div>
 </div>
+<hr/>
+<h5 class="d-inline-flex mr-2">¿Aún no posee una cuenta de usuario?</h5>
+<button type="submit" class="btn btn-info d-inline-flex mb-3" (mousedown)="$event.preventDefault()" (click)="router.navigateByUrl('register')"><span class="material-icons">person_add</span>Registrarse</button>

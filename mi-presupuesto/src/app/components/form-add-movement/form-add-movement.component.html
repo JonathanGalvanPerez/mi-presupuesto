@@ -8,33 +8,33 @@
 	<form [formGroup]="fg" (ngSubmit)="save()" class="col-12 col-sm-8 mx-auto py-3">
 		<div class="form-group">
 			<label for="mount">Monto</label>
-			<input type="number" step="10" placeholder="Ingresa el monto" autocomplete="off" ngbAutofocus class="form-control" formControlName="mount">
-			<div *ngIf="fg.controls['mount'].invalid && fg.controls['mount'].touched">
-				<div class="alert alert-danger" *ngIf="fg.controls['mount'].errors.required">Por favor ingrese un monto.</div>
-				<div class="alert alert-danger" *ngIf="fg.controls['mount'].errors.invalidMount && !fg.controls['mount'].errors.required">Monto invalido. Ingrese un monto mayor a $0 y menor a $500000.</div>
+			<input formControlName="mount" type="number" class="form-control" step="10" placeholder="Ingresa el monto" autocomplete="off" ngbAutofocus required>
+			<div *ngIf="mount.invalid && mount.touched">
+				<div class="alert alert-danger" *ngIf="mount.errors.required">Por favor ingrese un monto.</div>
+				<div class="alert alert-danger" *ngIf="mount.errors.invalidMount && !mount.errors.required">Monto invalido. Ingrese un monto mayor a $0 y menor a $500000.</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="type">Tipo</label>
-			<select formControlName="type" class="form-control" (change)="updateCategory()">
+			<select formControlName="type" class="form-control" (change)="updateCategory()" required>
 				<option [ngValue]="''" selected>Seleccione un tipo de transferencia</option>
 				<option [ngValue]="'Ingreso'">Ingreso</option>
 				<option [ngValue]="'Egreso'">Egreso</option>
 			</select>
-			<div class="alert alert-danger" *ngIf="fg.controls['type'].invalid && fg.controls['type'].touched">Por favor seleccione un tipo de transferencia.</div>
+			<div class="alert alert-danger" *ngIf="type.invalid && type.touched">Por favor seleccione un tipo de transferencia.</div>
 		</div>
 		<div class="form-group">
 			<label for="type">Categoria</label>
-			<select formControlName="category" class="form-control">
+			<select formControlName="category" class="form-control" required>
 				<option [ngValue]="''" selected>Seleccione una categoria</option>
 				<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
 			</select>
-			<div class="alert alert-danger" *ngIf="fg.controls['category'].invalid && fg.controls['category'].touched">Por favor seleccione una categoria.</div>
+			<div class="alert alert-danger" *ngIf="category.invalid && category.touched">Por favor seleccione una categoria.</div>
 		</div>
 		<div class="form-group">
 			<label for="concept">Concepto</label>
-			<input type="text" placeholder="Ingresa el concepto" autocomplete="off" class="form-control" formControlName="concept">
-			<div class="alert alert-danger" *ngIf="fg.controls['concept'].invalid && fg.controls['concept'].touched">Por favor ingrese un concepto.</div>
+			<input type="text" formControlName="concept" class="form-control" placeholder="Ingresa el concepto" autocomplete="off" required>
+			<div class="alert alert-danger" *ngIf="concept.invalid && concept.touched">Por favor ingrese un concepto.</div>
 		</div>
 		<button	type="submit" class="btn btn-primary w-100 p-2" [disabled]="fg.invalid">Guardar Transferencia</button>
 	</form>

@@ -71,11 +71,10 @@ export class MovementsApiClient {
         this.movements$.next(this.movements);
         console.log("se edito el registro");
         let oldBalance = this.balance.getValue();
-        if (type == "Ingreso") {
+        if (type == "Ingreso")
           this.balance.next((oldBalance - oldMount) + mount);
-        } else {
+        else
           this.balance.next((oldBalance + oldMount) - mount);
-        }
         this.updateBalance();
       }
     });
@@ -90,11 +89,10 @@ export class MovementsApiClient {
         this.movements$.next(this.movements);
         console.log("se agrego el registro");
         let balance = this.balance.getValue();
-        if (movement.type == "Ingreso") {
+        if (movement.type == "Ingreso")
           this.balance.next(balance + movement.mount);
-        } else {
+        else
           this.balance.next(balance - movement.mount);
-        }
         this.updateBalance();
       }
     });
