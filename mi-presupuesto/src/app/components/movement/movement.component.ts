@@ -41,10 +41,10 @@ export class MovementComponent implements OnInit {
   editClick() {
     this.displayOptions = false;
     const modalRef = this.modalService.open(FormEditMovementComponent);
-    modalRef.componentInstance.mount = this.mount;
+    modalRef.componentInstance.initialMount = this.mount;
     modalRef.componentInstance.type = this.type;
-    modalRef.componentInstance.category = this.category_id;
-    modalRef.componentInstance.concept = this.concept;
+    modalRef.componentInstance.initialCategory = this.category_id;
+    modalRef.componentInstance.initialConcept = this.concept;
     modalRef.componentInstance.id = this.id;
   }
 
@@ -52,9 +52,8 @@ export class MovementComponent implements OnInit {
     this.displayOptions = false;
     const modalRef = this.modalService.open(deleteModal, { ariaLabelledBy: 'modal-title' });
     modalRef.result.then((result) => {
-      if (result == 'delete') {
+      if (result == 'delete')
         this.deleteMovement.emit(this.id);
-      }
-    }, () => {});
+    }).catch(() => {});
   }
 }

@@ -15,7 +15,7 @@ CREATE TABLE `accounts` (
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `balance` int(11) NOT NULL
+  `balance` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

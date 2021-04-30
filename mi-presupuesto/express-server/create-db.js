@@ -5,7 +5,7 @@ fs.readFile('mi-presupuesto.sql', 'utf-8', (err, data) => {
 	if (err) {
 		console.error(err);
     return;
-  	} else {
+ 	} else {
     console.log("Archivo SQL encontrado");
 
     var con = mysql.createConnection({
@@ -18,10 +18,10 @@ fs.readFile('mi-presupuesto.sql', 'utf-8', (err, data) => {
 
     con.connect(function(err) {
       if (err) throw err;
-      console.log("Connected!");
+      console.log("Conectado!");
       con.query(data, function (err, result) {
         if (err) throw err;
-        console.log("Database created");
+        console.log("Base de Datos creado!");
         process.exit();
       });
     });

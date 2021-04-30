@@ -32,6 +32,7 @@ _Dirigirse a la carpeta **/mi-presupuesto**._
 ```
 ng serve
 ```
+Nota: Para iniciar sesión las credenciales son _celeste@email.com_ y _111_ o _madeline@email.com_ y _123_
 
 ## Tecnologías
 - Aplicación web desarrollada en *Typescript* con el framework *Angular*.
