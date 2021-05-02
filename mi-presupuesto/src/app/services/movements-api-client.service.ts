@@ -30,7 +30,7 @@ export class MovementsApiClient {
       console.log("userLog existe. Se cargan los datos de");
       console.log(this.email);
       const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('GET', this.config.apiEndpoint + '/loadAccount?email=' + this.email, { headers: headers });
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/account?email=' + this.email, { headers: headers });
       this.http.request(req).subscribe((data: HttpResponse<{}>) => {
         if(data.status === 200) {
           let response: any = data.body[0];
@@ -61,7 +61,7 @@ export class MovementsApiClient {
 
   edit(mount: number, oldMount: number, type: string, category: number, concept: string, id: string) {
     const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('GET', this.config.apiEndpoint + '/edit?mount=' + mount + '&category=' + category + '&concept=' + concept + '&id=' + id, { headers: headers });
+    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/movement', { 'mount': mount, 'category': category, 'concept': concept, 'id': id }, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         let movement: Movement = this.movements.find(movement => movement.id == id);
@@ -82,7 +82,7 @@ export class MovementsApiClient {
 
   add(movement: Movement) {
     const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('POST', this.config.apiEndpoint + '/add', movement, { headers: headers });
+    const req = new HttpRequest('POST', this.config.apiEndpoint + '/movement', movement, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         this.movements.unshift(movement);
@@ -99,9 +99,9 @@ export class MovementsApiClient {
   }
 
   delete(id: string) {
-    console.log("se recibio el llamado a delete")
+    console.log("Se recibio el llamado a delete")
     const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('GET', this.config.apiEndpoint + '/delete?id=' + id, { headers: headers });
+    const req = new HttpRequest('DELETE', this.config.apiEndpoint + '/movement?id=' + id, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         let index = this.movements.findIndex(movement => movement.id === id);
@@ -121,7 +121,7 @@ export class MovementsApiClient {
   updateBalance() {
     console.log("Se ejecuto la actualizancion del balance");
     const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('POST', this.config.apiEndpoint + '/updateBalance', { 'balance': this.balance.getValue(), 'email': this.email }, { headers: headers });
+    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/balance', { 'balance': this.balance.getValue(), 'email': this.email }, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200)
         console.log("se actualizo el balance");

@@ -58,7 +58,7 @@ export class AuthService {
   createAccount(name: string, email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('POST', this.config.apiEndpoint + '/createAccount', { 'name': name, 'email': email, 'password': password }, { headers: headers });
+      const req = new HttpRequest('POST', this.config.apiEndpoint + '/account', { 'name': name, 'email': email, 'password': password }, { headers: headers });
       this.http.request(req).subscribe((result: HttpResponse<{}>) => {
         if (result.status === 200)
           resolve();

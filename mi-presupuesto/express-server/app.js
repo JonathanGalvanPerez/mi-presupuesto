@@ -43,7 +43,7 @@ app.get("/validateEmail", (req, res) => {
 	});
 });
 
-app.post("/createAccount", (req, res) => {
+app.post("/account", (req, res) => {
 	var query = connection.query("INSERT INTO accounts(email, password, name) VALUES(?,?,?)", [req.body.email, req.body.password, req.body.name], (error, result) => {
 		if(error && error.code === "ER_DUP_ENTRY")
 			res.sendStatus(409);
@@ -54,17 +54,8 @@ app.post("/createAccount", (req, res) => {
 	});
 });
 
-app.get("/loadAccount", (req, res) => {
+app.get("/account", (req, res) => {
 	var query = connection.query("SELECT * FROM accounts WHERE email=?", [req.query.email], (error, result) => {
-		if(error)
-			throw error;
-		else
-			res.json(result);
-	});
-});
-
-app.get("/lastMovements", (req, res) => {
-	var query = connection.query("SELECT * FROM movements WHERE user_email=? ORDER BY date DESC LIMIT 10", [req.query.user_email], (error, result) => {
 		if(error)
 			throw error;
 		else
@@ -81,16 +72,7 @@ app.get("/allMovements", (req, res) => {
 	});
 });
 
-app.get("/categoryList", (req, res) => {
-	var query = connection.query("SELECT * FROM movements WHERE user_email=? AND category=? ORDER BY date", [req.query.user_email, req.query.category], (error, result) => {
-		if(error)
-			throw error;
-		else
-			res.json(result);
-	});
-});
-
-app.post("/updateBalance", (req, res) => {
+app.put("/balance", (req, res) => {
 	var query = connection.query("UPDATE accounts SET balance=? WHERE email=?", [req.body.balance, req.body.email], (error, result) => {
 		if(error)
 			throw error;
@@ -99,7 +81,7 @@ app.post("/updateBalance", (req, res) => {
 	});
 });
 
-app.post("/add", (req, res) => {
+app.post("/movement", (req, res) => {
 	var query = connection.query("INSERT INTO movements(id, mount, type, category, concept, date, user_email) VALUES(?,?,?,?,?,?,?)",
 		[req.body.id, req.body.mount, req.body.type, req.body.category, req.body.concept, req.body.date, req.body.user_email], (error, result) => {
 		if(error)
@@ -109,8 +91,8 @@ app.post("/add", (req, res) => {
 	});
 });
 
-app.get("/edit", (req, res) => {
-	var query = connection.query("UPDATE movements SET mount=?, category=?, concept=? WHERE id=?", [req.query.mount, req.query.category, req.query.concept, req.query.id], (error, result) => {
+app.put("/movement", (req, res) => {
+	var query = connection.query("UPDATE movements SET mount=?, category=?, concept=? WHERE id=?", [req.body.mount, req.body.category, req.body.concept, req.body.id], (error, result) => {
 		if(error)
 			throw error;
 		else
@@ -118,7 +100,7 @@ app.get("/edit", (req, res) => {
 	});
 });
 
-app.get("/delete", (req, res) => {
+app.delete("/movement", (req, res) => {
 	var query = connection.query("DELETE FROM movements WHERE id=?", [req.query.id], (error, result) => {
 		if(error)
 			throw error;
