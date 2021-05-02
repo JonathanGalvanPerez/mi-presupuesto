@@ -23,8 +23,8 @@ export interface AppConfig {
   apiEndpoint: string;
 }
 const APP_CONFIG_VALUE: AppConfig = {
-  apiEndpoint: 'https://mi-presupuesto-api.herokuapp.com'
-  // Con servidor local 'http://localhost:3000'
+  apiEndpoint: 'http://localhost:3000'
+  // Con servidor online 'https://mi-presupuesto-api.herokuapp.com'
 }
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config'); 
 

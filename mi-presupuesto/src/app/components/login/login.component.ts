@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder, public authService: AuthService, private movementsApiClient: MovementsApiClient, public router: Router) {
     let state = this.router.getCurrentNavigation().extras.state;
-    console.log(state);
     if(state)
       this.newAccountAlert = state.newAccountAlert;
   }
