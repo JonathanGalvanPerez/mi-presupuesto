@@ -10,23 +10,21 @@ export class AuthService {
 
   login(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('POST', this.config.apiEndpoint + '/login', {'email': email, 'password': password}, { headers: headers });
-      this.http.request(req).subscribe((result: HttpResponse<{}>) => {
+      const req = new HttpRequest('POST', this.config.apiEndpoint + '/login', {'email': email, 'password': password});
+      this.http.request(req).subscribe((result: HttpResponse<string>) => {
         if (result.status === 200) {
-          if (result.body) {
-            localStorage.setItem('userLog', email);
-            resolve();
-          } else {
-            reject();
-          }
-        }
+          localStorage.setItem('userLog', email);
+          localStorage.setItem('authToken', result.body);
+          resolve();
+        } else if(result.status === 401)
+          reject();
       });
     });
   }
 
   logOut(): any {
   	localStorage.removeItem('userLog');
+    localStorage.removeItem('authToken');
   }
 
   isLoggedIn(): boolean {
@@ -35,8 +33,7 @@ export class AuthService {
 
   validateEmail(email: string): Promise<{ [s: string]: boolean }> {
     return new Promise<{ [s: string]: boolean }>((resolve, reject) => {
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('GET', this.config.apiEndpoint + '/validateEmail?email=' + email, { headers: headers });
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/validateEmail?email=' + email);
       this.http.request(req).subscribe((result: HttpResponse<{}>) => {
         if (result.status === 200)
           resolve(result.body? null: { invalidEmail: true });
@@ -46,8 +43,7 @@ export class AuthService {
 
   existEmail(email: string): Promise<{ [s: string]: boolean }> {
     return new Promise<{ [s: string]: boolean }>((resolve, reject) => {
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('GET', this.config.apiEndpoint + '/validateEmail?email=' + email, { headers: headers });
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/validateEmail?email=' + email);
       this.http.request(req).subscribe((result: HttpResponse<{}>) => {
         if (result.status === 200)
           resolve(result.body? { registeredEmail: true }: null);
@@ -57,8 +53,7 @@ export class AuthService {
 
   createAccount(name: string, email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('POST', this.config.apiEndpoint + '/account', { 'name': name, 'email': email, 'password': password }, { headers: headers });
+      const req = new HttpRequest('POST', this.config.apiEndpoint + '/account', { 'name': name, 'email': email, 'password': password });
       this.http.request(req).subscribe((result: HttpResponse<{}>) => {
         if (result.status === 200)
           resolve();

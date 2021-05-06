@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MovementsApiClient } from '../../services/movements-api-client.service';
 import { FormGroup, FormBuilder, FormControl, Validators, AsyncValidatorFn } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +13,16 @@ export class LoginComponent implements OnInit {
   fg: FormGroup;
 	errorLog: boolean;
   newAccountAlert = false;
+  invalidToken = false;
 
   constructor(private fb: FormBuilder, public authService: AuthService, private movementsApiClient: MovementsApiClient, public router: Router) {
     let state = this.router.getCurrentNavigation().extras.state;
-    if(state)
-      this.newAccountAlert = state.newAccountAlert;
+    if(state){
+      if(state.newAccountAlert)
+        this.newAccountAlert = state.newAccountAlert;
+      if(state.invalidToken)
+        this.invalidToken = state.invalidToken;
+    }
   }
 
   ngOnInit(): void {

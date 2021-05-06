@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Movement } from '../models/movement.model';
 import { APP_CONFIG, AppConfig } from '../app.module';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -15,7 +16,7 @@ export class MovementsApiClient {
   movements: Movement[];
   movements$: BehaviorSubject<Movement[]>;
 
-  constructor(@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig, private http: HttpClient) {
+  constructor(@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig, private http: HttpClient, private router: Router) {
     this.balance = new BehaviorSubject<number>(0);
     this.movements$ = new BehaviorSubject<Movement[]>([]);
   }
@@ -29,15 +30,25 @@ export class MovementsApiClient {
     return new Promise<void>((resolve, reject) => {
       console.log("userLog existe. Se cargan los datos de");
       console.log(this.email);
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('GET', this.config.apiEndpoint + '/account?email=' + this.email, { headers: headers });
+      var authToken = localStorage.getItem('authToken');
+      console.log(authToken);
+      const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/secure/account?email=' + this.email, { headers: headers });
       this.http.request(req).subscribe((data: HttpResponse<{}>) => {
         if(data.status === 200) {
+          console.log(data);
           let response: any = data.body[0];
           this.email = response.email;
           this.name = response.name;
           this.balance.next(response.balance as number);
           this.loadMovements().then(() => resolve());
+        }
+      }, error => {
+        console.log("Error http");
+        console.log(error);
+        if(error.status === 401){
+          this.removeCredentials();
+          resolve();
         }
       });
     });
@@ -45,14 +56,16 @@ export class MovementsApiClient {
 
   loadMovements() {
     return new Promise<void>((resolve, reject) => {
-      const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-      const req = new HttpRequest('GET', this.config.apiEndpoint + '/allMovements?user_email=' + this.email, { headers: headers });
+      var authToken = localStorage.getItem('authToken');
+      const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+      const req = new HttpRequest('GET', this.config.apiEndpoint + '/secure/allMovements?user_email=' + this.email, { headers: headers });
       this.http.request(req).subscribe((data: HttpResponse<{}>) => {
         if(data.status === 200) {
           var response: any = data.body;
           var allMovements = response.map(m => new Movement(m.mount, m.type, m.category, m.concept, m.date, m.user_email, m.id));
           this.movements = allMovements;
           this.movements$.next(this.movements);
+          console.log(allMovements);
           resolve();
         }
       });
@@ -60,8 +73,9 @@ export class MovementsApiClient {
   }
 
   edit(mount: number, oldMount: number, type: string, category: number, concept: string, id: string) {
-    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/movement', { 'mount': mount, 'category': category, 'concept': concept, 'id': id }, { headers: headers });
+    var authToken = localStorage.getItem('authToken');
+    const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/secure/movement', { 'mount': mount, 'category': category, 'concept': concept, 'id': id }, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         let movement: Movement = this.movements.find(movement => movement.id == id);
@@ -77,12 +91,18 @@ export class MovementsApiClient {
           this.balance.next((oldBalance + oldMount) - mount);
         this.updateBalance();
       }
+    }, error => {
+      if(error.status === 401) {
+        this.removeCredentials();
+        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
+      }
     });
   }
 
   add(movement: Movement) {
-    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('POST', this.config.apiEndpoint + '/movement', movement, { headers: headers });
+    var authToken = localStorage.getItem('authToken');
+    const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+    const req = new HttpRequest('POST', this.config.apiEndpoint + '/secure/movement', movement, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         this.movements.unshift(movement);
@@ -95,13 +115,19 @@ export class MovementsApiClient {
           this.balance.next(balance - movement.mount);
         this.updateBalance();
       }
+    }, error => {
+      if(error.status === 401) {
+        this.removeCredentials();
+        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
+      }
     });
   }
 
   delete(id: string) {
     console.log("Se recibio el llamado a delete")
-    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('DELETE', this.config.apiEndpoint + '/movement?id=' + id, { headers: headers });
+    var authToken = localStorage.getItem('authToken');
+    const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+    const req = new HttpRequest('DELETE', this.config.apiEndpoint + '/secure/movement?id=' + id, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200) {
         let index = this.movements.findIndex(movement => movement.id === id);
@@ -115,17 +141,29 @@ export class MovementsApiClient {
           this.balance.next(oldBalance+deleted[0].mount);
         this.updateBalance();
       }
+    }, error => {
+      if(error.status === 401) {
+        this.removeCredentials();
+        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
+      }
     });
   }
 
   updateBalance() {
     console.log("Se ejecuto la actualizancion del balance");
-    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
-    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/balance', { 'balance': this.balance.getValue(), 'email': this.email }, { headers: headers });
+    var authToken = localStorage.getItem('authToken');
+    const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
+    const req = new HttpRequest('PUT', this.config.apiEndpoint + '/secure/balance', { 'balance': this.balance.getValue(), 'email': this.email }, { headers: headers });
     this.http.request(req).subscribe((data: HttpResponse<{}>) => {
       if(data.status === 200)
         console.log("se actualizo el balance");
     });
+  }
+
+  removeCredentials() {
+    console.log("Token invalido. Se removieron las credenciales.");
+    localStorage.removeItem('userLog');
+    localStorage.removeItem('authToken');
   }
 
   subscribeOnChangeBalance(fn) {
