@@ -3,7 +3,7 @@
 	<button type="button" class="close" aria-label="Close" (click)="newAccountAlert=false"><span aria-hidden="true">&times;</span></button>
 </div>
 <div class="alert alert-danger alert-dismissible" id="alert" role="alert" *ngIf="invalidToken">
-	Su sesión expiró o su token de seguridad ya no es válido. Por favor inicie sesión nuevamente.
+	Usted no ha iniciado sesión o su sesión expiró. En ese caso inicie sesión nuevamente.
 	<button type="button" class="close" aria-label="Close" (click)="invalidToken=false"><span aria-hidden="true">&times;</span></button>
 </div>
 <div class="card card-outline-secondary col-12 col-md-6">

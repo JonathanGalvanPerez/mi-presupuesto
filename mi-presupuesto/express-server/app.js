@@ -30,7 +30,6 @@ app.use("/secure", (req, res, next) => {
 	    if (err) {
 			return res.status(401).send({ message: 'Token inválido' });
 	    } else {
-	    	console.log("Token validado.");
 			req.token = token;
 			next();
 	    }

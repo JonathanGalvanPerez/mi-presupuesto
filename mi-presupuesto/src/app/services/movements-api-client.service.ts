@@ -31,12 +31,10 @@ export class MovementsApiClient {
       console.log("userLog existe. Se cargan los datos de");
       console.log(this.email);
       var authToken = localStorage.getItem('authToken');
-      console.log(authToken);
       const headers: HttpHeaders = new HttpHeaders({'authorization': authToken});
       const req = new HttpRequest('GET', this.config.apiEndpoint + '/secure/account?email=' + this.email, { headers: headers });
       this.http.request(req).subscribe((data: HttpResponse<{}>) => {
         if(data.status === 200) {
-          console.log(data);
           let response: any = data.body[0];
           this.email = response.email;
           this.name = response.name;
@@ -65,7 +63,6 @@ export class MovementsApiClient {
           var allMovements = response.map(m => new Movement(m.mount, m.type, m.category, m.concept, m.date, m.user_email, m.id));
           this.movements = allMovements;
           this.movements$.next(this.movements);
-          console.log(allMovements);
           resolve();
         }
       });
