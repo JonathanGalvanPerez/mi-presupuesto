@@ -40,4 +40,4 @@ Nota: Para iniciar sesión las credenciales son _celeste@email.com_ y _111_ o _m
 - Aplicación web desarrollada en *Typescript* con el framework *Angular*.
 - Servidor API REST desarrollado en *Node.js* con el framework *Express Server*.
 - Base de datos desarrollada localmente con *MySQL* y de modo online en *PostgreSQL*.
-- Librerías utilizadas: *Reactive Forms*, *Rxjs*, *HTTP*, entre otras.
+- Librerías utilizadas: *Reactive Forms*, *RxJS*, *HTTP*, *Bootstrap*, entre otras.
