@@ -15,7 +15,11 @@ export class UserLoggedGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const isLoggedIn = this.authService.isLoggedIn();
     if (!isLoggedIn)
-  		this.router.navigateByUrl('/login', { state: { invalidToken: true } });
+      if(sessionStorage.getItem("invalidToken") !== null) {
+        sessionStorage.clear();
+    		this.router.navigateByUrl('/login', { state: { invalidToken: true } });
+      } else
+        this.router.navigateByUrl('/login');
     else return isLoggedIn;
   }
   

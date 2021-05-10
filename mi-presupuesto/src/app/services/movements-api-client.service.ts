@@ -45,7 +45,8 @@ export class MovementsApiClient {
         console.log("Error http");
         console.log(error);
         if(error.status === 401){
-          this.removeCredentials();
+          localStorage.clear();
+          sessionStorage.setItem("invalidToken", "");
           resolve();
         }
       });
@@ -89,10 +90,8 @@ export class MovementsApiClient {
         this.updateBalance();
       }
     }, error => {
-      if(error.status === 401) {
-        this.removeCredentials();
-        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
-      }
+      if(error.status === 401)
+        this.revokeLogin();
     });
   }
 
@@ -113,10 +112,8 @@ export class MovementsApiClient {
         this.updateBalance();
       }
     }, error => {
-      if(error.status === 401) {
-        this.removeCredentials();
-        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
-      }
+      if(error.status === 401)
+        this.revokeLogin();
     });
   }
 
@@ -139,10 +136,8 @@ export class MovementsApiClient {
         this.updateBalance();
       }
     }, error => {
-      if(error.status === 401) {
-        this.removeCredentials();
-        this.router.navigateByUrl('/login', { state: { invalidToken: true } });
-      }
+      if(error.status === 401)
+        this.revokeLogin();
     });
   }
 
@@ -157,10 +152,10 @@ export class MovementsApiClient {
     });
   }
 
-  removeCredentials() {
+  revokeLogin() {
     console.log("Token invalido. Se removieron las credenciales.");
-    localStorage.removeItem('userLog');
-    localStorage.removeItem('authToken');
+    localStorage.clear();
+    this.router.navigateByUrl('/login', { state: { invalidToken: true } });
   }
 
   subscribeOnChangeBalance(fn) {
