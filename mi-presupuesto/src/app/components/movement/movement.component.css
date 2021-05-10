@@ -7,7 +7,7 @@
 	margin: 10px;
 	overflow: hidden;
 }
-@media (min-width: 768px) {
+@media (min-width: 992px) {
 	.movement-editable:hover .dark {
 		display: flex;
 	}

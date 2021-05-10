@@ -38,3 +38,18 @@ li a {
 	align-items: center;
 	height: 100%;
 }
+.active {
+	font-weight: bold;
+	background-color: #0270AC;
+}
+@media (min-width: 992px) {
+	#navbarNav {
+		height: 100%;
+	}
+	.navbar-nav {
+		height: 100%;
+	}
+	.active {
+		background-color: #0080C5;
+	}
+}
