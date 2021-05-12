@@ -14,7 +14,7 @@
 		</div>
 		<div class="col selector p-md-2">
 			<label class="mr-2">Categoria: </label>
-			<select class="form-control col-8 col-md" [(ngModel)]="categorySelected" (ngModelChange)="categorySelection()">
+			<select class="form-control col-8 col-md" [(ngModel)]="categorySelected">
 				<option value="0">Todos</option>
 				<option *ngFor="let category of categories | keyvalue" [ngValue]="category.key">{{ category.value }}</option>
 			</select>
@@ -22,7 +22,7 @@
 	</div>
 	<ul class="my-1">
 		<p *ngIf="!movements.length">No hay movimientos aún para administrar.<p>
-		<li *ngFor="let m of movementsSelected">
+		<li *ngFor="let m of movements | filter: typeSelected: categorySelected">
 			<app-movement
 				(deleteMovement) = "movementsApiClient.delete($event)"
 				[mount] = 'm.mount'

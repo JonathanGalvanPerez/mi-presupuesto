@@ -12,7 +12,6 @@ import { Category } from '../../models/category.model';
 })
 export class MovementsManagerComponent implements OnInit {
 	movements: Movement[];
-  movementsSelected: Movement[];
 	categories: Map<number, string>;
 	categorySelected = 0;
 	typeSelected = "";
@@ -21,11 +20,9 @@ export class MovementsManagerComponent implements OnInit {
   	this.categories = Category.getCategories("");
   	this.movementsApiClient.subscribeOnChangeMovements(movements => {
       this.movements = movements;
-      this.movementsSelected = movements;
       this.categorySelected = 0;
       this.typeSelected = "";
     });
-    this.movementsSelected = this.movements;
   }
 
   ngOnInit(): void {
@@ -37,31 +34,9 @@ export class MovementsManagerComponent implements OnInit {
 
   typeSelection() {
   	this.categorySelected = 0;
-  	if(this.typeSelected == "") {
-  		this.movementsSelected = this.movements;
+  	if(this.typeSelected == "")
   		this.categories = Category.getCategories("");
-  	}	else {
-	  	this.filterType(this.typeSelected);
+  	else
 	 		this.categories = Category.getCategories(this.typeSelected);
-	 	}
-  }
-
-  categorySelection() {
-  	if(this.categorySelected == 0) {
-  		if(this.typeSelected == "")
-	  		this.movementsSelected = this.movements;
-	  	else
-	  		this.filterType(this.typeSelected);
-  	} else {
-  		this.filterCategory(this.categorySelected);
-  	}
-  }
-
-  filterType(type: string) {
-    this.movementsSelected = this.movements.filter(movement => movement.type === type);
-  }
-
-  filterCategory(category: number) {
-    this.movementsSelected = this.movements.filter(movement => movement.category === category);
   }
 }

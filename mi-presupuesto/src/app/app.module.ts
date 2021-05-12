@@ -16,6 +16,7 @@ import { FormAddMovementComponent } from './components/form-add-movement/form-ad
 import { FormEditMovementComponent } from './components/form-edit-movement/form-edit-movement.component';
 import { UserLoggedGuard } from './guards/user-logged.guard';
 import { RegisterComponent } from './components/register/register.component';
+import { FilterPipe } from './pipes/filter.pipe';
 
 
 // api config
@@ -42,7 +43,8 @@ export function init_app(movementsApiClient: MovementsApiClient): () => Promise<
     MovementComponent,
     FormAddMovementComponent,
     FormEditMovementComponent,
-    RegisterComponent
+    RegisterComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
